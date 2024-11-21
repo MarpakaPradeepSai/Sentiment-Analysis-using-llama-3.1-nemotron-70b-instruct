@@ -4,7 +4,7 @@ from openai import OpenAI
 # Initialize OpenAI client
 client = OpenAI(
     base_url="https://integrate.api.nvidia.com/v1",
-    api_key="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"  # Replace with your actual API key
+    api_key="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"  # Replace with your actual API key
 )
 
 # Streamlit UI - Enhanced Styling and Layout
