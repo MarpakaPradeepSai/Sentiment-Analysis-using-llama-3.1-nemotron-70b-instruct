@@ -132,6 +132,7 @@ if st.button("🔍 Analyze Sentiment"):
                 f'<div class="sentiment-box positive">Sentiment: **Positive** 😊</div>',
                 unsafe_allow_html=True,
             )
+            st.balloons()
         elif sentiment == "negative":
             st.markdown(
                 f'<div class="sentiment-box negative">Sentiment: **Negative** 😔</div>',
@@ -142,6 +143,7 @@ if st.button("🔍 Analyze Sentiment"):
                 f'<div class="sentiment-box neutral">Sentiment: **Neutral** 😐</div>',
                 unsafe_allow_html=True,
             )
+            st.snow()
         else:
             st.warning("⚠️ Unable to determine sentiment. Please try again.")
     else:
