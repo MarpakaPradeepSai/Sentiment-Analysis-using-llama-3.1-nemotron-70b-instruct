@@ -86,14 +86,16 @@ if st.button("✨ Reveal Sentiment ✨"):
                     time.sleep(0.05)  # Simulate typing effect
         
             if sentiment.strip():
-                # Display sentiment with an appropriate emoji and animation
+                # Display sentiment with appropriate emoji and animation
                 if "positive" in sentiment.lower():
                     st.success(f"Sentiment: **{sentiment.strip()}** 😄🎉")
                     st.balloons()
                 elif "negative" in sentiment.lower():
                     st.error(f"Sentiment: **{sentiment.strip()}** 😞💔")
+                    st.snow()  # Simulate sadness with snow
                 else:
                     st.info(f"Sentiment: **{sentiment.strip()}** 😐💭")
+                    st.balloons()  # Simpler confetti-like effect for neutral
             else:
                 st.warning("Could not determine sentiment. Please try again. 😞")
     else:
