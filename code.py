@@ -49,7 +49,7 @@ st.markdown("""
 # Initialize OpenAI client
 client = OpenAI(
     base_url="https://integrate.api.nvidia.com/v1",
-    api_key="API"  # Replace with your actual API key 
+    api_key="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"  # Replace with your actual API key 
 )
 
 # Title with emojis and styling
