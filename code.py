@@ -8,10 +8,10 @@ client = OpenAI(
     api_key="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"  # Replace with your actual API key
 )
 
-# Set page configuration
+# Set page configuration for centered layout
 st.set_page_config(page_title="Sentiment Analysis Magic ✨", page_icon="🔮", layout="centered")
 
-# Custom CSS for enhanced design
+# Custom CSS for enhanced design and increased sentiment text size
 st.markdown(
     """
     <style>
@@ -87,6 +87,12 @@ st.markdown(
         from { transform: rotate(0deg); }
         to { transform: rotate(360deg); }
     }
+    /* New CSS to increase sentiment text size */
+    .sentiment-text {
+        font-size: 2.5rem; /* Increased font size */
+        font-weight: bold;
+        text-align: center;
+    }
     </style>
     """,
     unsafe_allow_html=True
@@ -123,15 +129,15 @@ if st.button("✨ Reveal Sentiment ✨"):
                     sentiment += chunk.choices[0].delta.content.strip()
                     time.sleep(0.05)  # Simulate typing effect
 
-        # Display sentiment with animations
+        # Display sentiment with animations and increased font size
         if sentiment.strip():
             if "positive" in sentiment.lower():
-                st.success(f"**Sentiment:** Positive 😄🎉", icon="🎉")
+                st.markdown(f'<div class="sentiment-text">**Sentiment:** Positive 😄🎉</div>', unsafe_allow_html=True)
                 st.balloons()
             elif "negative" in sentiment.lower():
-                st.error(f"**Sentiment:** Negative 😞💔", icon="💔")
+                st.markdown(f'<div class="sentiment-text">**Sentiment:** Negative 😞💔</div>', unsafe_allow_html=True)
             else:
-                st.info(f"**Sentiment:** Neutral 😐💭", icon="💭")
+                st.markdown(f'<div class="sentiment-text">**Sentiment:** Neutral 😐💭</div>', unsafe_allow_html=True)
         else:
             st.warning("Could not determine sentiment. Please try again. 😞", icon="⚠️")
     else:
