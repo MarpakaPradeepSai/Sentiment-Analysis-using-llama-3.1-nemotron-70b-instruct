@@ -1,6 +1,5 @@
 import streamlit as st
 from openai import OpenAI
-import time
 
 # Initialize OpenAI client
 client = OpenAI(
@@ -9,64 +8,46 @@ client = OpenAI(
 )
 
 # Set page configuration
-st.set_page_config(page_title="Sentiment Analysis Magic ✨", page_icon="🔮")
-
-# Custom CSS for styling
-st.markdown(
-    """
-    <style>
-    .reportview-container {
-        background: linear-gradient(135deg, #f0f8ff, #e6e6fa); /* Light blue gradient background */
-    }
-    .stTextArea textarea {
-        border-radius: 15px;
-        padding: 20px;
-        font-size: 16px;
-        border: 2px solid #ddd;
-    }
-    .stButton button {
-        background-color: #4CAF50; /* Green button */
-        color: white;
-        padding: 15px 30px;
-        border: none;
-        border-radius: 15px;
-        font-size: 18px;
-        cursor: pointer;
-        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-        transition: all 0.3s ease;
-    }
-    .stButton button:hover {
-        background-color: #45a049;
-        transform: translateY(-2px);
-        box-shadow: 0 6px 12px rgba(0,0,0,0.3);
-    }
-    .stMarkdown h1 {
-        text-align: center;
-        color: #333;
-        font-weight: bold;
-    }
-    .stAlert {
-        background-color: #f0f8ff;
-        padding: 15px;
-        border-radius: 10px;
-        border-left: 5px solid #3498db;
-    }
-    </style>
-    """,
-    unsafe_allow_html=True
+st.set_page_config(
+    page_title="Sentiment Analysis with Llama-3",
+    page_icon="😊",  # Add a friendly emoji to the page tab
+    layout="centered"
 )
 
-# Streamlit UI with animations and better layout
-st.markdown("<h1>Sentiment Analysis Magic ✨ Using Llama-3.1 Nemotron 70b instruct</h1>", unsafe_allow_html=True)
-st.write("Enter your text below to reveal its sentiment! 🌟")
+# Custom CSS to style components
+st.markdown("""
+<style>
+    .stTextArea textarea {
+        border: 2px solid #4CAF50; /* Green border for text area */
+        border-radius: 10px;
+        padding: 15px;
+    }
+    .stButton button {
+        background-color: #4CAF50; /* Green background for button */
+        color: white;
+        padding: 12px 20px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+    }
+    .stButton button:hover {
+        background-color: #45a049; /* Darker green on hover */
+    }
+</style>
+""", unsafe_allow_html=True)
 
-input_text = st.text_area("👇 Enter text here:", "")
+# Title with an engaging emoji
+st.title("😊 Sentiment Analysis Using Llama-3.1 Nemotron 70b instruct")
 
-if st.button("✨ Reveal Sentiment ✨"):
+# Text input box for the user to enter text
+input_text = st.text_area("✍️ Enter text for sentiment analysis:", "")
+
+if st.button("🔍 Analyze Sentiment"):
     if input_text:
-        with st.spinner("Unveiling sentiment... ⏳"):
+        # Add a spinner while processing
+        with st.spinner('Analyzing... 🧠'):
             completion = client.chat.completions.create(
-                model="nvidia/llama-3.1-nemotron-70b-instruct",
+                model="nvidia/llama-3.1-nemotron-70b-instruct",  # Ensure this model supports sentiment analysis
                 messages=[
                     {
                         "role": "user",
@@ -78,25 +59,23 @@ if st.button("✨ Reveal Sentiment ✨"):
                 max_tokens=1024,
                 stream=True
             )
-        
-            sentiment = ""
+
+            sentiment = ""  # Variable to accumulate the sentiment result
             for chunk in completion:
+                # Ensure that content exists in the chunk and accumulate
                 if chunk.choices[0].delta.content:
                     sentiment += chunk.choices[0].delta.content.strip()
-                    time.sleep(0.05)  # Simulate typing effect
-        
-            if sentiment.strip():
-                # Display sentiment with appropriate emoji and animation
-                if "positive" in sentiment.lower():
-                    st.success(f"Sentiment: **{sentiment.strip()}** 😄🎉")
-                    st.balloons()
-                elif "negative" in sentiment.lower():
-                    st.error(f"Sentiment: **{sentiment.strip()}** 😞💔")
-                    st.snow()  # Simulate sadness with snow
-                else:
-                    st.info(f"Sentiment: **{sentiment.strip()}** 😐💭")
-                    st.balloons()  # Simpler confetti-like effect for neutral
+
+        # Check the accumulated sentiment and display with emojis
+        if sentiment.strip():
+            sentiment = sentiment.strip()
+            if sentiment.lower() == "positive":
+                st.write(f"Sentiment: **{sentiment}** 😄")  # Happy emoji for positive
+            elif sentiment.lower() == "negative":
+                st.write(f"Sentiment: **{sentiment}** 😞")  # Sad emoji for negative
             else:
-                st.warning("Could not determine sentiment. Please try again. 😞")
+                st.write(f"Sentiment: **{sentiment}** 😐")  # Neutral emoji for neutral
+        else:
+            st.write("😞 Could not determine sentiment. Please try again.")
     else:
-        st.warning("Please enter some text to analyze. 📝")
+        st.write("📝 Please enter some text to analyze.")
