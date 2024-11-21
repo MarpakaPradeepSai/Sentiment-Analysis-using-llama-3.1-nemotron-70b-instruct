@@ -1,6 +1,7 @@
 import streamlit as st
 from openai import OpenAI
-import time  # Import time for adding a delay effect
+import time
+import base64  # For embedding images
 
 # Initialize OpenAI client
 client = OpenAI(
@@ -10,97 +11,113 @@ client = OpenAI(
 
 # Set page configuration
 st.set_page_config(
-    page_title="Sentiment Analyzer with Llama-3 🤖",
-    page_icon="😊",
-    layout="centered"
+    page_title="Sentiment Analyzer Pro with Llama-3 ✨",
+    page_icon="🤩",
+    layout="wide"  # Use wide layout for more space
 )
 
-# Custom CSS for enhanced styling
+# --- Background and Styling ---
+def get_base64_of_bin_file(bin_file):
+    with open(bin_file, 'rb') as f:
+        data = f.read()
+    return base64.b64encode(data).decode()
+
+def set_background(png_file):
+    bin_str = get_base64_of_bin_file(png_file)
+    page_bg_img = '''
+    <style>
+    .stApp {
+        background-image: url("data:image/png;base64,%s");
+        background-size: cover;
+    }
+    </style>
+    ''' % bin_str
+    st.markdown(page_bg_img, unsafe_allow_html=True)
+
+# Replace 'background.png' with your background image file
+# Ensure you have a background image in the same directory as your script
+set_background('background.png')  # You'll need to provide a background image
+
+# --- Custom CSS ---
 st.markdown("""
 <style>
-    .stTextArea textarea {
-        border: 3px solid #007BFF;  /* Blue border */
-        border-radius: 15px;
-        padding: 20px;
-        font-size: 16px;
-        box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.1); /* Add shadow */
-    }
-    .stButton button {
-        background-color: #28A745;  /* Success green */
-        color: white;
-        padding: 15px 25px;
-        border: none;
-        border-radius: 12px;
+    [data-testid="stTextArea"] div div textarea {
+        border: 4px solid #8A2BE2;  /* Violet border */
+        border-radius: 20px;
+        padding: 25px;
         font-size: 18px;
-        box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.2); /* Add shadow */
-        cursor: pointer;
-        transition: transform 0.2s ease, box-shadow 0.2s ease;  /* Smooth transition */
+        box-shadow: 7px 7px 15px rgba(0, 0, 0, 0.2);
+        transition: border 0.3s ease;
     }
-    .stButton button:hover {
-        background-color: #218838; /* Darker green on hover */
-        transform: translateY(-3px);  /* Slight lift effect on hover */
+    [data-testid="stTextArea"] div div textarea:focus {
+        border: 4px solid #9370DB;  /* Medium purple on focus */
+    }
+    [data-testid="stButton"] button {
+        background: linear-gradient(135deg, #663399, #A020F0);  /* Gradient background */
+        color: white;
+        padding: 18px 30px;
+        border: none;
+        border-radius: 15px;
+        font-size: 20px;
         box-shadow: 5px 5px 12px rgba(0, 0, 0, 0.3);
+        cursor: pointer;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    [data-testid="stButton"] button:hover {
+        transform: translateY(-5px);
+        box-shadow: 7px 7px 15px rgba(0, 0, 0, 0.4);
     }
     .result {
-        padding: 20px;
-        border-radius: 15px;
-        background-color: #f0f8ff;  /* Light blue background */
-        box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.1);
-        margin-top: 20px;
-        font-size: 20px;
+        padding: 30px;
+        border-radius: 20px;
+        background: rgba(255, 255, 255, 0.8);  /* Semi-transparent white */
+        box-shadow: 7px 7px 15px rgba(0, 0, 0, 0.1);
+        margin-top: 30px;
+        font-size: 24px;
         text-align: center;
+        animation: fadeIn 1s ease-in-out;
+    }
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
     }
 </style>
 """, unsafe_allow_html=True)
 
-# Title with animation and emojis
-st.title("🤖 Sentiment Analyzer with Llama-3 😊")
+# --- Main Content ---
+st.title("🤩 Sentiment Analyzer Pro with Llama-3 🚀")
+st.markdown("Discover the emotion behind your words with advanced AI! 👇")
 
-# Subheader
-st.subheader("Type your text below and let Llama-3 reveal its sentiment! 👇")
+input_text = st.text_area("✍️ Enter your text here to unveil its sentiment:")
 
-# Text input area
-input_text = st.text_area("✍️ Enter your text here:")
-
-if st.button("🔍 Analyze Sentiment"):
+if st.button("✨ Analyze Sentiment ✨"):
     if input_text:
-        with st.spinner('Analyzing... 🧠'):
+        with st.spinner('Unveiling sentiment... 🌀'):
             completion = client.chat.completions.create(
                 model="nvidia/llama-3.1-nemotron-70b-instruct",
-                messages=[
-                    {
-                        "role": "user",
-                        "content": f"Please analyze the sentiment of the following text and no matter what just respond with only one word: 'Positive', 'Negative', or 'Neutral'. Text: '{input_text}'"
-                    }
-                ],
-                temperature=0.5,
-                top_p=1,
-                max_tokens=1024,
-                stream=True
+                messages=[{"role": "user", "content": f"Please analyze the sentiment... (same prompt)"}],
+                temperature=0.5, top_p=1, max_tokens=1024, stream=True
             )
-
             sentiment = ""
             for chunk in completion:
                 if chunk.choices[0].delta.content:
                     sentiment += chunk.choices[0].delta.content.strip()
-                    time.sleep(0.05)  # Add a slight delay for a typing effect
+                    time.sleep(0.05)
 
         if sentiment.strip():
-            sentiment = sentiment.strip()
-            if sentiment.lower() == "positive":
-                result_display = f"😄 Sentiment: **{sentiment}** 🎉"
-            elif sentiment.lower() == "negative":
-                result_display = f"😞 Sentiment: **{sentiment}** 😔"
+            sentiment = sentiment.strip().lower()
+            if sentiment == "positive":
+                result_display = f"🎉 Sentiment: **{sentiment.capitalize()}** 😄"
+            elif sentiment == "negative":
+                result_display = f"😞 Sentiment: **{sentiment.capitalize()}** 😢"
             else:
-                result_display = f"😐 Sentiment: **{sentiment}** 🤔"
+                result_display = f"😐 Sentiment: **{sentiment.capitalize()}** 🤔"
 
-            # Display result in a styled container
             st.markdown(f'<div class="result">{result_display}</div>', unsafe_allow_html=True)
         else:
             st.write("😞 Could not determine sentiment. Please try again.")
     else:
         st.write("📝 Please enter some text to analyze.")
 
-# Footer
-st.markdown("---")  # Horizontal line separator
-st.markdown("Powered by OpenAI's Llama-3 and Streamlit ✨")
+st.markdown("---")
+st.markdown("✨ Powered by OpenAI's Llama-3 and Streamlit's magic ✨")
