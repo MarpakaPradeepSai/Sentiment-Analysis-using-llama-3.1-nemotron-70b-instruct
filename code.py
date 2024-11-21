@@ -1,5 +1,6 @@
 import streamlit as st
 from openai import OpenAI
+import time  # Import time for adding a delay effect
 
 # Initialize OpenAI client
 client = OpenAI(
@@ -9,45 +10,63 @@ client = OpenAI(
 
 # Set page configuration
 st.set_page_config(
-    page_title="Sentiment Analysis with Llama-3",
-    page_icon="😊",  # Add a friendly emoji to the page tab
+    page_title="Sentiment Analyzer with Llama-3 🤖",
+    page_icon="😊",
     layout="centered"
 )
 
-# Custom CSS to style components
+# Custom CSS for enhanced styling
 st.markdown("""
 <style>
     .stTextArea textarea {
-        border: 2px solid #4CAF50; /* Green border for text area */
-        border-radius: 10px;
-        padding: 15px;
+        border: 3px solid #007BFF;  /* Blue border */
+        border-radius: 15px;
+        padding: 20px;
+        font-size: 16px;
+        box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.1); /* Add shadow */
     }
     .stButton button {
-        background-color: #4CAF50; /* Green background for button */
+        background-color: #28A745;  /* Success green */
         color: white;
-        padding: 12px 20px;
+        padding: 15px 25px;
         border: none;
-        border-radius: 8px;
+        border-radius: 12px;
+        font-size: 18px;
+        box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.2); /* Add shadow */
         cursor: pointer;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;  /* Smooth transition */
     }
     .stButton button:hover {
-        background-color: #45a049; /* Darker green on hover */
+        background-color: #218838; /* Darker green on hover */
+        transform: translateY(-3px);  /* Slight lift effect on hover */
+        box-shadow: 5px 5px 12px rgba(0, 0, 0, 0.3);
+    }
+    .result {
+        padding: 20px;
+        border-radius: 15px;
+        background-color: #f0f8ff;  /* Light blue background */
+        box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.1);
+        margin-top: 20px;
+        font-size: 20px;
+        text-align: center;
     }
 </style>
 """, unsafe_allow_html=True)
 
-# Title with an engaging emoji
-st.title("😊 Sentiment Analysis Using Llama-3.1 Nemotron 70b instruct")
+# Title with animation and emojis
+st.title("🤖 Sentiment Analyzer with Llama-3 😊")
 
-# Text input box for the user to enter text
-input_text = st.text_area("✍️ Enter text for sentiment analysis:", "")
+# Subheader
+st.subheader("Type your text below and let Llama-3 reveal its sentiment! 👇")
+
+# Text input area
+input_text = st.text_area("✍️ Enter your text here:")
 
 if st.button("🔍 Analyze Sentiment"):
     if input_text:
-        # Add a spinner while processing
         with st.spinner('Analyzing... 🧠'):
             completion = client.chat.completions.create(
-                model="nvidia/llama-3.1-nemotron-70b-instruct",  # Ensure this model supports sentiment analysis
+                model="nvidia/llama-3.1-nemotron-70b-instruct",
                 messages=[
                     {
                         "role": "user",
@@ -60,22 +79,28 @@ if st.button("🔍 Analyze Sentiment"):
                 stream=True
             )
 
-            sentiment = ""  # Variable to accumulate the sentiment result
+            sentiment = ""
             for chunk in completion:
-                # Ensure that content exists in the chunk and accumulate
                 if chunk.choices[0].delta.content:
                     sentiment += chunk.choices[0].delta.content.strip()
+                    time.sleep(0.05)  # Add a slight delay for a typing effect
 
-        # Check the accumulated sentiment and display with emojis
         if sentiment.strip():
             sentiment = sentiment.strip()
             if sentiment.lower() == "positive":
-                st.write(f"Sentiment: **{sentiment}** 😄")  # Happy emoji for positive
+                result_display = f"😄 Sentiment: **{sentiment}** 🎉"
             elif sentiment.lower() == "negative":
-                st.write(f"Sentiment: **{sentiment}** 😞")  # Sad emoji for negative
+                result_display = f"😞 Sentiment: **{sentiment}** 😔"
             else:
-                st.write(f"Sentiment: **{sentiment}** 😐")  # Neutral emoji for neutral
+                result_display = f"😐 Sentiment: **{sentiment}** 🤔"
+
+            # Display result in a styled container
+            st.markdown(f'<div class="result">{result_display}</div>', unsafe_allow_html=True)
         else:
             st.write("😞 Could not determine sentiment. Please try again.")
     else:
         st.write("📝 Please enter some text to analyze.")
+
+# Footer
+st.markdown("---")  # Horizontal line separator
+st.markdown("Powered by OpenAI's Llama-3 and Streamlit ✨")
