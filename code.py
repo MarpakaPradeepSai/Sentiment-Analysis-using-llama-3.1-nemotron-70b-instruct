@@ -61,7 +61,7 @@ st.markdown(
             border-radius: 15px;
             text-align: center;
             font-weight: bold;
-            font-size: 1.5em;
+            font-size: 1.8em;
         }
         .positive {
             background-color: #c8f7c5;
