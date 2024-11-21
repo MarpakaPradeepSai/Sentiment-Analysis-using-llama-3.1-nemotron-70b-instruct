@@ -67,12 +67,10 @@ if st.button("✨ Reveal Sentiment ✨"):
         with st.spinner("Unveiling sentiment... ⏳"):
             completion = client.chat.completions.create(
                 model="nvidia/llama-3.1-nemotron-70b-instruct",
-                messages=[
-                    {
-                        "role": "user",
-                        "content": f"Please analyze the sentiment of the following text and no matter what just respond with only one word: 'Positive', 'Negative', or 'Neutral'. Text: '{input_text}'"
-                    }
-                ],
+                messages=[{
+                    "role": "user",
+                    "content": f"Please analyze the sentiment of the following text and no matter what just respond with only one word: 'Positive', 'Negative', or 'Neutral'. Text: '{input_text}'"
+                }],
                 temperature=0.5,
                 top_p=1,
                 max_tokens=1024,
@@ -89,13 +87,15 @@ if st.button("✨ Reveal Sentiment ✨"):
                 # Display sentiment with appropriate emoji and animation
                 if "positive" in sentiment.lower():
                     st.success(f"Sentiment: **{sentiment.strip()}** 😄🎉")
-                    st.balloons()
+                    st.balloons()  # Only for positive sentiment
                 elif "negative" in sentiment.lower():
                     st.error(f"Sentiment: **{sentiment.strip()}** 😞💔")
-                    st.snow()  # Simulate sadness with snow
+                    # Custom visual effect for negative sentiment (fireworks-like effect)
+                    st.markdown('<div style="color: #FF4500; font-size: 36px; font-weight: bold;">🔥💥 Negative Sentiment! 💥🔥</div>', unsafe_allow_html=True)
+                    st.balloons()  # Optional: adding some extra effect (can be replaced with something more fitting)
                 else:
                     st.info(f"Sentiment: **{sentiment.strip()}** 😐💭")
-                    st.balloons()  # Simpler confetti-like effect for neutral
+                    st.snow()  # Only for neutral sentiment
             else:
                 st.warning("Could not determine sentiment. Please try again. 😞")
     else:
