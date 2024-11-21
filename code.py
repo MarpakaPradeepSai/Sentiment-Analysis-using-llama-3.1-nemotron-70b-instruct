@@ -9,7 +9,7 @@ client = OpenAI(
 
 # Streamlit UI - Enhanced Styling and Layout
 st.set_page_config(
-    page_title="🌈 Sentiment Analyzer Pro",
+    page_title="🌟 Sentiment Analyzer Pro",
     page_icon="💬",
     layout="centered"
 )
@@ -85,11 +85,11 @@ st.markdown("# 🌟 Sentiment Analyzer Pro")
 st.markdown(
     """
     Welcome to the **Sentiment Analyzer Pro**! 🎉  
-    Uncover the sentiment of any text effortlessly. Enter your text, and we'll classify it as **Positive** 😊, **Negative** 😔, or **Neutral** 😐.  
+    Enter your text below, and we'll classify it as **Positive** 😊, **Negative** 😔, or **Neutral** 😐.  
     """
 )
 
-# Input Box with Animated Placeholder
+# Input Box with Placeholder
 st.markdown("### 🖋️ Enter Your Text Below:")
 input_text = st.text_area(
     "",
@@ -97,7 +97,7 @@ input_text = st.text_area(
     height=150
 )
 
-# Animated Divider
+# Divider
 st.markdown("---")
 st.markdown("### 🚀 Analyze Sentiment:")
 
@@ -105,28 +105,25 @@ st.markdown("### 🚀 Analyze Sentiment:")
 if st.button("🔍 Analyze Sentiment"):
     if input_text.strip():
         try:
-            # Modify the prompt to ensure the model responds with just 'positive', 'negative', or 'neutral'
+            # Modify the prompt and call the API
             completion = client.chat.completions.create(
                 model="nvidia/llama-3.1-nemotron-70b-instruct",
                 messages=[
                     {
                         "role": "user",
-                        "content": f"Analyze the sentiment of the following text. Respond with one of the following words: 'positive', 'negative', or 'neutral'. Text: '{input_text}'"
+                        "content": f"Analyze the sentiment of the following text. Respond with one of these words: 'positive', 'negative', or 'neutral'. Text: '{input_text}'"
                     }
                 ],
-                temperature=0.7,  # Increase temperature for diversity
-                top_p=0.9,  # Controls diversity via nucleus sampling
-                max_tokens=10,  # Limit token length for short response
+                temperature=0.7,
+                top_p=0.9,
+                max_tokens=10,  # Keeping it concise
                 stream=False
             )
 
-            # Log the raw response for debugging
-            st.text("Debugging Response:")
-            st.json(completion)
-
+            # Extract the sentiment result
             sentiment = completion.choices[0].message['content'].strip().lower()
 
-            # Check sentiment response and display accordingly
+            # Display results dynamically
             if sentiment == "positive":
                 st.markdown(
                     f'<div class="sentiment-box positive">Sentiment: **Positive** 😊</div>',
@@ -144,6 +141,7 @@ if st.button("🔍 Analyze Sentiment"):
                 )
             else:
                 st.warning("⚠️ Unable to determine sentiment. Please try again.")
+
         except Exception as e:
             st.error(f"Error: {e}")
     else:
@@ -154,6 +152,6 @@ st.markdown("---")
 st.markdown(
     """
     🛠️ Built with ❤️ using [Streamlit](https://streamlit.io) and NVIDIA's Llama-3.1 Model.  
-    ✨ Enhance your text analytics today!  
+    ✨ Analyze your text sentiment with ease!  
     """
 )
