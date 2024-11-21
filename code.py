@@ -1,8 +1,11 @@
 import streamlit as st
-import openai
+from openai import OpenAI
 
 # Initialize OpenAI client
-openai.api_key = "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"  # Replace with your actual API key
+client = OpenAI(
+    base_url="https://integrate.api.nvidia.com/v1",
+    api_key="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"  # Replace with your actual API key
+)
 
 # Streamlit UI - Enhanced Styling and Layout
 st.set_page_config(
@@ -102,16 +105,23 @@ st.markdown("### 🚀 Analyze Sentiment:")
 if st.button("🔍 Analyze Sentiment"):
     if input_text.strip():
         try:
-            # Modify the prompt and call the OpenAI API
-            completion = openai.Completion.create(
-                model="text-davinci-003",  # Change to an appropriate model
-                prompt=f"Analyze the sentiment of the following text. Respond with one of these words: 'positive', 'negative', or 'neutral'. Text: '{input_text}'",
+            # Modify the prompt and call the API
+            completion = client.chat.completions.create(
+                model="nvidia/llama-3.1-nemotron-70b-instruct",
+                messages=[
+                    {
+                        "role": "user",
+                        "content": f"Analyze the sentiment of the following text. Respond with one of these words: 'positive', 'negative', or 'neutral'. Text: '{input_text}'"
+                    }
+                ],
                 temperature=0.7,
-                max_tokens=10  # Keeping it concise
+                top_p=0.9,
+                max_tokens=10,  # Keeping it concise
+                stream=False
             )
 
             # Extract the sentiment result
-            sentiment = completion.choices[0].text.strip().lower()
+            sentiment = completion.choices[0].message['content'].strip().lower()
 
             # Display results dynamically
             if sentiment == "positive":
@@ -132,7 +142,7 @@ if st.button("🔍 Analyze Sentiment"):
             else:
                 st.warning("⚠️ Unable to determine sentiment. Please try again.")
 
-        except openai.error.OpenAIError as e:
+        except Exception as e:
             st.error(f"Error: {e}")
     else:
         st.warning("⚠️ Please enter some text to analyze.")
@@ -141,7 +151,7 @@ if st.button("🔍 Analyze Sentiment"):
 st.markdown("---")
 st.markdown(
     """
-    🛠️ Built with ❤️ using [Streamlit](https://streamlit.io) and OpenAI's GPT models.  
+    🛠️ Built with ❤️ using [Streamlit](https://streamlit.io) and NVIDIA's Llama-3.1 Model.  
     ✨ Analyze your text sentiment with ease!  
     """
 )
