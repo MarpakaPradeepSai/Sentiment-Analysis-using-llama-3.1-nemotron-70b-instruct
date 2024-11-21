@@ -85,7 +85,6 @@ st.markdown("# 🌟 Sentiment Analyzer Pro")
 st.markdown(
     """
     Welcome to the **Sentiment Analyzer Pro**! 🎉  
-    Uncover the sentiment of any text effortlessly. Enter your text, and we'll classify it as **Positive** 😊, **Negative** 😔, or **Neutral** 😐.  
     """
 )
 
