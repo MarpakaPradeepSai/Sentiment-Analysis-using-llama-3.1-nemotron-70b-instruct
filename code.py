@@ -132,12 +132,12 @@ if st.button("✨ Reveal Sentiment ✨"):
         # Display sentiment with animations and increased font size
         if sentiment.strip():
             if "positive" in sentiment.lower():
-                st.markdown(f'<div class="sentiment-text">**Sentiment:** Positive 😄🎉</div>', unsafe_allow_html=True)
+                st.markdown(f'<div class="sentiment-text"><b>Sentiment:</b> Positive 😄🎉</div>', unsafe_allow_html=True)
                 st.balloons()
             elif "negative" in sentiment.lower():
-                st.markdown(f'<div class="sentiment-text">**Sentiment:** Negative 😞💔</div>', unsafe_allow_html=True)
+                st.markdown(f'<div class="sentiment-text"><b>Sentiment:</b> Negative 😞💔</div>', unsafe_allow_html=True)
             else:
-                st.markdown(f'<div class="sentiment-text">**Sentiment:** Neutral 😐💭</div>', unsafe_allow_html=True)
+                st.markdown(f'<div class="sentiment-text"><b>Sentiment:</b> Neutral 😐💭</div>', unsafe_allow_html=True)
         else:
             st.warning("Could not determine sentiment. Please try again. 😞", icon="⚠️")
     else:
