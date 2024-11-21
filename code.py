@@ -150,7 +150,6 @@ if st.button("🔍 Analyze Sentiment"):
 st.markdown("---")
 st.markdown(
     """
-    🛠️ Built with ❤️ using [Streamlit](https://streamlit.io) and NVIDIA's Llama-3.1 Model.  
-    ✨ Enhance your text analytics today!  
+    🛠️ Built with ❤️ using [Streamlit](https://streamlit.io) and [NVIDIA's Llama-3.1-Nemotron-70b-instruct](https://build.nvidia.com/nvidia/llama-3_1-nemotron-70b-instruct)
     """
 )
