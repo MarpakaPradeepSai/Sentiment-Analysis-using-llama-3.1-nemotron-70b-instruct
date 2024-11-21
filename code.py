@@ -9,7 +9,7 @@ client = OpenAI(
 )
 
 # Set page configuration
-st.set_page_config(page_title="Sentiment Analysis Magic ✨", page_icon="🔮")
+st.set_page_config(page_title="Sentiment Analysis Magic ✨", page_icon="🔮", layout="wide")
 
 # Custom CSS for styling
 st.markdown(
@@ -23,6 +23,7 @@ st.markdown(
         padding: 20px;
         font-size: 16px;
         border: 2px solid #ddd;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
     }
     .stButton button {
         background-color: #4CAF50; /* Green button */
@@ -51,11 +52,8 @@ st.markdown(
         border-radius: 10px;
         border-left: 5px solid #3498db;
     }
-    .sentiment-text {
-        font-size: 36px; /* Increase font size for predicted sentiment */
-        font-weight: bold;
-        color: #333;
-        text-align: center;
+    .stSpinner div {
+        border-color: #3498db transparent transparent transparent;
     }
     </style>
     """,
@@ -73,33 +71,44 @@ if st.button("✨ Reveal Sentiment ✨"):
         with st.spinner("Unveiling sentiment... ⏳"):
             completion = client.chat.completions.create(
                 model="nvidia/llama-3.1-nemotron-70b-instruct",
-                messages=[{
-                    "role": "user",
-                    "content": f"Please analyze the sentiment of the following text carefully, determining whether the tone is positive, negative, or neutral. Once the analysis is complete, respond with only one word: 'Positive' if the sentiment conveys a favorable or optimistic tone, 'Negative' if the sentiment expresses dissatisfaction, sadness, or any form of negativity, or 'Neutral' if the sentiment does not lean towards either positive or negative but rather remains impartial or neutral. Do not provide any additional explanations or details, just the sentiment classification.'. Text: '{input_text}'"
-                }],
+                messages=[
+                    {
+                        "role": "user",
+                        "content": f"Please analyze the sentiment of the following text carefully, determining whether the tone is positive, negative, or neutral. Once the analysis is complete, respond with only one word: 'Positive' if the sentiment conveys a favorable or optimistic tone, 'Negative' if the sentiment expresses dissatisfaction, sadness, or any form of negativity, or 'Neutral' if the sentiment does not lean towards either positive or negative but rather remains impartial or neutral. Do not provide any additional explanations or details, just the sentiment classification.'. Text: '{input_text}'"
+                    }
+                ],
                 temperature=0.5,
                 top_p=1,
                 max_tokens=1024,
                 stream=True
             )
-        
+
             sentiment = ""
             for chunk in completion:
                 if chunk.choices[0].delta.content:
                     sentiment += chunk.choices[0].delta.content.strip()
                     time.sleep(0.05)  # Simulate typing effect
-        
+
             if sentiment.strip():
                 # Display sentiment with an appropriate emoji and animation
-                sentiment_display = f"<div class='sentiment-text'>Sentiment: **{sentiment.strip()}**</div>"
                 if "positive" in sentiment.lower():
-                    st.markdown(f"{sentiment_display} 😄🎉", unsafe_allow_html=True)
+                    st.success(f"Sentiment: **{sentiment.strip()}** 😄🎉")
                     st.balloons()
                 elif "negative" in sentiment.lower():
-                    st.markdown(f"{sentiment_display} 😞💔", unsafe_allow_html=True)
+                    st.error(f"Sentiment: **{sentiment.strip()}** 😞💔")
                 else:
-                    st.markdown(f"{sentiment_display} 😐💭", unsafe_allow_html=True)
+                    st.info(f"Sentiment: **{sentiment.strip()}** 😐💭")
             else:
                 st.warning("Could not determine sentiment. Please try again. 😞")
     else:
         st.warning("Please enter some text to analyze. 📝")
+
+# Adding a footer
+st.markdown(
+    """
+    <div style="text-align: center; margin-top: 20px;">
+        <p>Made with ❤️ by Your Name</p>
+    </div>
+    """,
+    unsafe_allow_html=True
+)
