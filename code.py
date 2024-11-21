@@ -8,7 +8,7 @@ client = OpenAI(
 )
 
 # Streamlit UI
-st.title("Sentiment Analysis with OpenAI")
+st.title("Sentiment Analysis Using Llama-3.1 Nemotron 70b instruct")
 
 st.write("""
 This app performs sentiment analysis on text input and classifies it as 'positive', 'negative', or 'neutral'.
