@@ -96,6 +96,7 @@ if st.button("✨ Reveal Sentiment ✨"):
                     st.balloons()
                 elif "negative" in sentiment.lower():
                     st.error(f"Sentiment: **{sentiment.strip()}** 😞💔")
+                    st.snow()
                 else:
                     st.info(f"Sentiment: **{sentiment.strip()}** 😐💭")
             else:
