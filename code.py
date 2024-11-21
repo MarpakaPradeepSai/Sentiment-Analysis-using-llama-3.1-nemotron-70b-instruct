@@ -102,13 +102,3 @@ if st.button("✨ Reveal Sentiment ✨"):
                 st.warning("Could not determine sentiment. Please try again. 😞")
     else:
         st.warning("Please enter some text to analyze. 📝")
-
-# Adding a footer
-st.markdown(
-    """
-    <div style="text-align: center; margin-top: 20px;">
-        <p>Made with ❤️ by Your Name</p>
-    </div>
-    """,
-    unsafe_allow_html=True
-)
