@@ -88,15 +88,19 @@ if st.button("Analyze Sentiment 🔍", key="analyze", help="Click to analyze sen
                 if chunk.choices[0].delta.content:
                     sentiment += chunk.choices[0].delta.content.strip()
 
+            # Clean up the sentiment result by removing unwanted characters
+            sentiment = sentiment.strip().lower()
+
             # Display the sentiment result in a styled result box with emojis
-            if sentiment.strip():
-                if sentiment.strip().lower() == "positive":
-                    sentiment_emoji = "😊"
-                elif sentiment.strip().lower() == "negative":
-                    sentiment_emoji = "😞"
-                else:
-                    sentiment_emoji = "😐"
-                st.markdown(f'<div class="result-box">Sentiment: {sentiment.strip()} {sentiment_emoji}</div>', unsafe_allow_html=True)
+            if sentiment == "positive":
+                sentiment_emoji = "😊"  # Emoji for positive sentiment
+                st.markdown(f'<div class="result-box">Sentiment: {sentiment.capitalize()} {sentiment_emoji}</div>', unsafe_allow_html=True)
+            elif sentiment == "negative":
+                sentiment_emoji = "😞"  # Corrected emoji for negative sentiment
+                st.markdown(f'<div class="result-box">Sentiment: {sentiment.capitalize()} {sentiment_emoji}</div>', unsafe_allow_html=True)
+            elif sentiment == "neutral":
+                sentiment_emoji = "😐"  # Emoji for neutral sentiment
+                st.markdown(f'<div class="result-box">Sentiment: {sentiment.capitalize()} {sentiment_emoji}</div>', unsafe_allow_html=True)
             else:
                 st.write("Could not determine sentiment. Please try again.")
         else:
