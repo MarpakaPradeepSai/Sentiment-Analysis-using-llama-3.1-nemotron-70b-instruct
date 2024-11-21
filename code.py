@@ -90,7 +90,7 @@ st.markdown(
 )
 
 # Input Box with Animated Placeholder
-st.markdown("### 🖋️ Enter Your Text Below:")
+st.markdown("##### 🖋️ Enter Your Text Below To Analyze It's Sentiment:")
 input_text = st.text_area(
     "",
     placeholder="✨ Type something amazing here... e.g., 'Streamlit makes data apps so easy!' ✨",
