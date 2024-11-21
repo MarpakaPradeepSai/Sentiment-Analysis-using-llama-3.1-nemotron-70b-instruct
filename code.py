@@ -16,7 +16,7 @@ st.markdown(
     """
     <style>
     .reportview-container {
-        background: linear-gradient(135deg, #f0f8ff, #e6e6fa);
+        background: linear-gradient(135deg, #f0f8ff, #e6e6fa); /* Light blue gradient background */
     }
     .stTextArea textarea {
         border-radius: 15px;
@@ -25,7 +25,7 @@ st.markdown(
         border: 2px solid #ddd;
     }
     .stButton button {
-        background-color: #4CAF50;
+        background-color: #4CAF50; /* Green button */
         color: white;
         padding: 15px 30px;
         border: none;
@@ -56,18 +56,11 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-# Streamlit UI
+# Streamlit UI with animations and better layout
 st.markdown("<h1>Sentiment Analysis Magic ✨ Using Llama-3.1 Nemotron 70b instruct</h1>", unsafe_allow_html=True)
 st.write("Enter your text below to reveal its sentiment! 🌟")
 
 input_text = st.text_area("👇 Enter text here:", "")
-
-def display_falling_leaves():
-    leaves = ["🍂", "🍁", "🍃"]
-    for _ in range(5):
-        st.write(" ".join(leaves))
-        time.sleep(0.2)
-        leaves = [" "] + leaves[:-1]
 
 if st.button("✨ Reveal Sentiment ✨"):
     if input_text:
@@ -85,23 +78,24 @@ if st.button("✨ Reveal Sentiment ✨"):
                 max_tokens=1024,
                 stream=True
             )
-
+        
             sentiment = ""
             for chunk in completion:
                 if chunk.choices[0].delta.content:
                     sentiment += chunk.choices[0].delta.content.strip()
-                    time.sleep(0.05)
-
+                    time.sleep(0.05)  # Simulate typing effect
+        
             if sentiment.strip():
+                # Display sentiment with appropriate emoji and animation
                 if "positive" in sentiment.lower():
                     st.success(f"Sentiment: **{sentiment.strip()}** 😄🎉")
                     st.balloons()
                 elif "negative" in sentiment.lower():
-                    st.error(f"Sentiment: **{sentiment.strip()}** 💔⛈️")
-                    st.write("⚡⚡⚡")
+                    st.error(f"Sentiment: **{sentiment.strip()}** 😞💔")
+                    st.snow()  # Simulate sadness with snow
                 else:
-                    st.info(f"Sentiment: **{sentiment.strip()}** 😐🍂")
-                    display_falling_leaves()
+                    st.info(f"Sentiment: **{sentiment.strip()}** 😐💭")
+                    st.balloons()  # Simpler confetti-like effect for neutral
             else:
                 st.warning("Could not determine sentiment. Please try again. 😞")
     else:
