@@ -70,7 +70,7 @@ if st.button("✨ Reveal Sentiment ✨"):
                 messages=[
                     {
                         "role": "user",
-                        "content": f"Please analyze the sentiment of the following text and no matter what just respond with only one word: 'Positive', 'Negative', or 'Neutral'. Text: '{input_text}'"
+                        "content": f"Please analyze the sentiment of the following text carefully, determining whether the tone is positive, negative, or neutral. Once the analysis is complete, respond with only one word: 'Positive' if the sentiment conveys a favorable or optimistic tone, 'Negative' if the sentiment expresses dissatisfaction, sadness, or any form of negativity, or 'Neutral' if the sentiment does not lean towards either positive or negative but rather remains impartial or neutral. Do not provide any additional explanations or details, just the sentiment classification.'. Text: '{input_text}'"
                     }
                 ],
                 temperature=0.5,
@@ -86,16 +86,14 @@ if st.button("✨ Reveal Sentiment ✨"):
                     time.sleep(0.05)  # Simulate typing effect
         
             if sentiment.strip():
-                # Display sentiment with appropriate emoji and animation
+                # Display sentiment with an appropriate emoji and animation
                 if "positive" in sentiment.lower():
                     st.success(f"Sentiment: **{sentiment.strip()}** 😄🎉")
                     st.balloons()
                 elif "negative" in sentiment.lower():
                     st.error(f"Sentiment: **{sentiment.strip()}** 😞💔")
-                    st.snow()  # Simulate sadness with snow
                 else:
                     st.info(f"Sentiment: **{sentiment.strip()}** 😐💭")
-                    st.balloons()  # Simpler confetti-like effect for neutral
             else:
                 st.warning("Could not determine sentiment. Please try again. 😞")
     else:
