@@ -9,7 +9,7 @@ client = OpenAI(
 )
 
 # Set page configuration
-st.set_page_config(page_title="Sentiment Analysis Magic ✨", page_icon="🔮", layout="centered")
+st.set_page_config(page_title="Sentiment Analysis Magic ✨", page_icon="🔮")
 
 # Custom CSS for styling
 st.markdown(
@@ -23,7 +23,6 @@ st.markdown(
         padding: 20px;
         font-size: 16px;
         border: 2px solid #ddd;
-        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
     }
     .stButton button {
         background-color: #4CAF50; /* Green button */
@@ -52,16 +51,13 @@ st.markdown(
         border-radius: 10px;
         border-left: 5px solid #3498db;
     }
-    .stSpinner div {
-        border-color: #3498db transparent transparent transparent;
-    }
     </style>
     """,
     unsafe_allow_html=True
 )
 
 # Streamlit UI with animations and better layout
-st.markdown("<h1>Sentiment Analysis Magic ✨</h1>", unsafe_allow_html=True)
+st.markdown("<h1>Sentiment Analysis Magic ✨ Using Llama-3.1 Nemotron 70b instruct</h1>", unsafe_allow_html=True)
 st.write("Enter your text below to reveal its sentiment! 🌟")
 
 input_text = st.text_area("👇 Enter text here:", "")
@@ -74,7 +70,7 @@ if st.button("✨ Reveal Sentiment ✨"):
                 messages=[
                     {
                         "role": "user",
-                        "content": f"Please analyze the sentiment of the following text carefully, determining whether the tone is positive, negative, or neutral. Once the analysis is complete, respond with only one word: 'Positive' if the sentiment conveys a favorable or optimistic tone, 'Negative' if the sentiment expresses dissatisfaction, sadness, or any form of negativity, or 'Neutral' if the sentiment does not lean towards either positive or negative but rather remains impartial or neutral. Do not provide any additional explanations or details, just the sentiment classification. Text: '{input_text}'"
+                        "content": f"Please analyze the sentiment of the following text and no matter what just respond with only one word: 'Positive', 'Negative', or 'Neutral'. Text: '{input_text}'"
                     }
                 ],
                 temperature=0.5,
@@ -82,23 +78,24 @@ if st.button("✨ Reveal Sentiment ✨"):
                 max_tokens=1024,
                 stream=True
             )
-
+        
             sentiment = ""
             for chunk in completion:
                 if chunk.choices[0].delta.content:
                     sentiment += chunk.choices[0].delta.content.strip()
                     time.sleep(0.05)  # Simulate typing effect
-
+        
             if sentiment.strip():
-                # Display sentiment with an appropriate emoji and animation
+                # Display sentiment with appropriate emoji and animation
                 if "positive" in sentiment.lower():
-                    st.success(f"Sentiment: **{sentiment.strip()}** 😄")
+                    st.success(f"Sentiment: **{sentiment.strip()}** 😄🎉")
                     st.balloons()
                 elif "negative" in sentiment.lower():
-                    st.error(f"Sentiment: **{sentiment.strip()}** 😞")
+                    st.error(f"Sentiment: **{sentiment.strip()}** 😞💔")
+                    st.snow()  # Simulate sadness with snow
                 else:
-                    st.info(f"Sentiment: **{sentiment.strip()}** 😐")
-                    st.snow()
+                    st.info(f"Sentiment: **{sentiment.strip()}** 😐💭")
+                    st.balloons()  # Simpler confetti-like effect for neutral
             else:
                 st.warning("Could not determine sentiment. Please try again. 😞")
     else:
