@@ -1,7 +1,6 @@
 import streamlit as st
 from openai import OpenAI
 import time
-import random  # To randomly choose different negative responses
 
 # Initialize OpenAI client
 client = OpenAI(
@@ -130,34 +129,13 @@ if st.button("✨ Reveal Sentiment ✨"):
                     sentiment += chunk.choices[0].delta.content.strip()
                     time.sleep(0.05)  # Simulate typing effect
 
-        # Define a list of possible negative sentiment responses
-        negative_responses = [
-            "Oh no! It looks like this is a negative sentiment 😞💔.",
-            "Sadly, the mood is quite gloomy here 😔.",
-            "This text seems to have a negative tone 💭💔.",
-            "Unfortunately, the sentiment is negative 😞."
-        ]
-        
         # Display sentiment with animations and increased font size
         if sentiment.strip():
             if "positive" in sentiment.lower():
                 st.markdown(f'<div class="sentiment-text"><b>Sentiment:</b> Positive 😄🎉</div>', unsafe_allow_html=True)
                 st.balloons()  # For Positive Sentiment
             elif "negative" in sentiment.lower():
-                # Randomly choose one of the negative responses
-                negative_message = random.choice(negative_responses)
-                st.markdown(f'<div class="sentiment-text"><b>Sentiment:</b> {negative_message}</div>', unsafe_allow_html=True)
-                # Optionally, change background color for negative sentiment
-                st.markdown(
-                    """
-                    <style>
-                    body {
-                        background-color: #f8d7da; /* Light red background for negative sentiment */
-                    }
-                    </style>
-                    """,
-                    unsafe_allow_html=True
-                )
+                st.markdown(f'<div class="sentiment-text"><b>Sentiment:</b> Negative 😞💔</div>', unsafe_allow_html=True)
             else:
                 st.markdown(f'<div class="sentiment-text"><b>Sentiment:</b> Neutral 😐💭</div>', unsafe_allow_html=True)
                 st.snow()  # For Neutral Sentiment (Snow Effect)
