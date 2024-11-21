@@ -88,12 +88,13 @@ if st.button("✨ Reveal Sentiment ✨"):
             if sentiment.strip():
                 # Display sentiment with an appropriate emoji and animation
                 if "positive" in sentiment.lower():
-                    st.success(f"Sentiment: **{sentiment.strip()}** 😄🎉")
+                    st.success(f"Sentiment: **{sentiment.strip()}** 😄")
                     st.balloons()
                 elif "negative" in sentiment.lower():
-                    st.error(f"Sentiment: **{sentiment.strip()}** 😞💔")
+                    st.error(f"Sentiment: **{sentiment.strip()}** 😞")
                 else:
-                    st.info(f"Sentiment: **{sentiment.strip()}** 😐💭")
+                    st.info(f"Sentiment: **{sentiment.strip()}** 😐")
+                    st.snow()
             else:
                 st.warning("Could not determine sentiment. Please try again. 😞")
     else:
