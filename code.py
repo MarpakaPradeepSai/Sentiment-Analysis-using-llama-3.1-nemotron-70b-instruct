@@ -7,101 +7,39 @@ client = OpenAI(
     api_key="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"  # Replace with your actual API key
 )
 
-# Set page config (optional)
-st.set_page_config(page_title="Sentiment Analysis", page_icon="💬", layout="centered")
+# Streamlit UI
+st.title("Sentiment Analysis Using Llama-3.1 Nemotron 70b instruct")
 
-# Add custom header and subheader with some color and emojis
-st.markdown("""
-    <style>
-    .title {
-        font-size: 40px;
-        font-weight: bold;
-        color: #4CAF50;
-        text-align: center;
-    }
-    .subheader {
-        font-size: 20px;
-        color: #555555;
-        text-align: center;
-    }
-    .input-box {
-        width: 100%;
-        font-size: 16px;
-        padding: 10px;
-        border-radius: 5px;
-        border: 1px solid #ccc;
-    }
-    .result-box {
-        background-color: #f1f1f1;
-        padding: 10px;
-        border-radius: 5px;
-        font-size: 20px;
-        font-weight: bold;
-        color: #333333;
-    }
-    .button-style {
-        font-size: 18px;
-        background-color: #4CAF50;
-        color: white;
-        border: none;
-        border-radius: 5px;
-        padding: 10px;
-        cursor: pointer;
-    }
-    .button-style:hover {
-        background-color: #45a049;
-    }
-    </style>
-""", unsafe_allow_html=True)
+# Text input box for the user to enter text
+input_text = st.text_area("Enter text for sentiment analysis:", "")
 
-# Display the title with emojis
-st.markdown('<p class="title">Sentiment Analysis Using Llama-3.1 Nemotron 70b Instruct 💬🤖</p>', unsafe_allow_html=True)
-
-# Add a subheader with emojis
-st.markdown('<p class="subheader">Enter some text and click "Analyze" to see its sentiment 🚀💬</p>', unsafe_allow_html=True)
-
-# Add a text area with custom styling for input text
-input_text = st.text_area("Enter text for sentiment analysis ✍️:", "", height=150, key="input_text", max_chars=1000)
-
-# Add a loading spinner with a message while analyzing the sentiment
-if st.button("Analyze Sentiment 🔍", key="analyze", help="Click to analyze sentiment"):
-    with st.spinner("Analyzing sentiment... Please wait ⏳..."):
-        if input_text:
-            # Modify the prompt to ensure the model responds with just 'positive', 'negative', or 'neutral'
-            completion = client.chat.completions.create(
-                model="nvidia/llama-3.1-nemotron-70b-instruct",  # Ensure this model supports sentiment analysis
-                messages=[
-                    {
-                        "role": "user",
-                        "content": f"Please analyze the sentiment of the following text and respond with only one word: 'positive', 'negative', or 'neutral'. Text: '{input_text}'"
-                    }
-                ],
-                temperature=0.5,
-                top_p=1,
-                max_tokens=1024,
-                stream=True
-            )
-            
-            sentiment = ""  # Variable to accumulate the sentiment result
-            for chunk in completion:
-                # Ensure that content exists in the chunk and accumulate
-                if chunk.choices[0].delta.content:
-                    sentiment += chunk.choices[0].delta.content.strip()
-
-            # Clean up the sentiment result by removing unwanted characters
-            sentiment = sentiment.strip().lower()
-
-            # Display the sentiment result in a styled result box with emojis
-            if sentiment == "positive":
-                sentiment_emoji = "😊"  # Emoji for positive sentiment
-                st.markdown(f'<div class="result-box">Sentiment: {sentiment.capitalize()} {sentiment_emoji}</div>', unsafe_allow_html=True)
-            elif sentiment == "negative":
-                sentiment_emoji = "😞"  # Corrected emoji for negative sentiment
-                st.markdown(f'<div class="result-box">Sentiment: {sentiment.capitalize()} {sentiment_emoji}</div>', unsafe_allow_html=True)
-            elif sentiment == "neutral":
-                sentiment_emoji = "😐"  # Emoji for neutral sentiment
-                st.markdown(f'<div class="result-box">Sentiment: {sentiment.capitalize()} {sentiment_emoji}</div>', unsafe_allow_html=True)
-            else:
-                st.write("Could not determine sentiment. Please try again.")
+if st.button("Analyze Sentiment"):
+    if input_text:
+        # Modify the prompt to ensure the model responds with just 'positive', 'negative', or 'neutral'
+        completion = client.chat.completions.create(
+            model="nvidia/llama-3.1-nemotron-70b-instruct",  # Ensure this model supports sentiment analysis
+            messages=[
+                {
+                    "role": "user",
+                    "content": f"Please analyze the sentiment of the following text and respond with only one word: 'positive', 'negative', or 'neutral'. Text: '{input_text}'"
+                }
+            ],
+            temperature=0.5,
+            top_p=1,
+            max_tokens=1024,
+            stream=True
+        )
+        
+        sentiment = ""  # Variable to accumulate the sentiment result
+        for chunk in completion:
+            # Ensure that content exists in the chunk and accumulate
+            if chunk.choices[0].delta.content:
+                sentiment += chunk.choices[0].delta.content.strip()
+        
+        # Check the accumulated sentiment and display
+        if sentiment.strip():
+            st.write(f"Sentiment: **{sentiment.strip()}**")
         else:
-            st.write("Please enter some text to analyze ✍️.")
+            st.write("Could not determine sentiment. Please try again.")
+    else:
+        st.write("Please enter some text to analyze.")
