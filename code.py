@@ -1,4 +1,8 @@
 import streamlit as st
+import openai
+
+# Initialize OpenAI client
+openai.api_key = "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"  # Replace with your actual API key
 
 # Streamlit UI - Enhanced Styling and Layout
 st.set_page_config(
@@ -84,7 +88,7 @@ st.markdown(
 
 # Input Box with Placeholder
 st.markdown("### 🖋️ Enter Your Text Below:")
-st.text_area(
+input_text = st.text_area(
     "",
     placeholder="✨ Type something amazing here... e.g., 'Streamlit makes data apps so easy!' ✨",
     height=150
@@ -94,14 +98,50 @@ st.text_area(
 st.markdown("---")
 st.markdown("### 🚀 Analyze Sentiment:")
 
-# Analyze Button
-st.button("🔍 Analyze Sentiment")
+# Analyze Button with Interactive Result
+if st.button("🔍 Analyze Sentiment"):
+    if input_text.strip():
+        try:
+            # Modify the prompt and call the OpenAI API
+            completion = openai.Completion.create(
+                model="text-davinci-003",  # Change to an appropriate model
+                prompt=f"Analyze the sentiment of the following text. Respond with one of these words: 'positive', 'negative', or 'neutral'. Text: '{input_text}'",
+                temperature=0.7,
+                max_tokens=10  # Keeping it concise
+            )
+
+            # Extract the sentiment result
+            sentiment = completion.choices[0].text.strip().lower()
+
+            # Display results dynamically
+            if sentiment == "positive":
+                st.markdown(
+                    f'<div class="sentiment-box positive">Sentiment: **Positive** 😊</div>',
+                    unsafe_allow_html=True,
+                )
+            elif sentiment == "negative":
+                st.markdown(
+                    f'<div class="sentiment-box negative">Sentiment: **Negative** 😔</div>',
+                    unsafe_allow_html=True,
+                )
+            elif sentiment == "neutral":
+                st.markdown(
+                    f'<div class="sentiment-box neutral">Sentiment: **Neutral** 😐</div>',
+                    unsafe_allow_html=True,
+                )
+            else:
+                st.warning("⚠️ Unable to determine sentiment. Please try again.")
+
+        except openai.error.OpenAIError as e:
+            st.error(f"Error: {e}")
+    else:
+        st.warning("⚠️ Please enter some text to analyze.")
 
 # Footer
 st.markdown("---")
 st.markdown(
     """
-    🛠️ Built with ❤️ using [Streamlit](https://streamlit.io) and NVIDIA's Llama-3.1 Model.  
+    🛠️ Built with ❤️ using [Streamlit](https://streamlit.io) and OpenAI's GPT models.  
     ✨ Analyze your text sentiment with ease!  
     """
 )
