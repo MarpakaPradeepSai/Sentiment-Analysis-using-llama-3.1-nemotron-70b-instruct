@@ -9,7 +9,7 @@ client = OpenAI(
 )
 
 # Set page configuration
-st.set_page_config(page_title="Sentiment Analysis Magic ✨", page_icon="🔮", layout="wide")
+st.set_page_config(page_title="Sentiment Analysis Magic ✨", page_icon="🔮", layout="centered")
 
 # Custom CSS for styling
 st.markdown(
