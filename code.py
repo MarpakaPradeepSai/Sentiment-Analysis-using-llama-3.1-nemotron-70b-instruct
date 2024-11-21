@@ -4,7 +4,7 @@ from openai import OpenAI
 # Initialize the OpenAI client
 client = OpenAI(
     base_url="https://integrate.api.nvidia.com/v1",
-    api_key="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"
+    api_key="$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"  # Replace with your actual API key
 )
 
 # Streamlit user interface
@@ -21,19 +21,23 @@ def get_sentiment(input_text):
         messages=[
             {
                 "role": "user",
-                "content": f"Please analyze the sentiment of the following text and respond with only one word: 'positive', 'negative', or 'neutral'. Text: '{input_text}'"
+                "content": f"Analyze the sentiment of the following text and respond with only one word: 'positive', 'negative', or 'neutral'. Text: '{input_text}'"
             }
         ],
         temperature=0.5,
         top_p=1,
-        max_tokens=1024,
-        stream=True
+        max_tokens=10,  # Limiting token length to just 1 word
+        stream=False  # Disable streaming to avoid chunk issues
     )
     
     # Process and return the response
-    for chunk in completion:
-        if chunk.choices[0].delta.content is not None:
-            return chunk.choices[0].delta.content.strip()
+    sentiment = completion.choices[0].message['content'].strip()
+    
+    # Check and clean the response if needed (e.g., remove unwanted characters like **)
+    if sentiment.lower() in ["positive", "negative", "neutral"]:
+        return sentiment
+    else:
+        return "Unable to determine sentiment"
 
 # Trigger sentiment analysis when the user presses the button
 if st.button('Analyze Sentiment'):
