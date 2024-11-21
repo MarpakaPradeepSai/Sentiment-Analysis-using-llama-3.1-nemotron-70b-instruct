@@ -1,157 +1,61 @@
 import streamlit as st
 from openai import OpenAI
 
-# Initialize OpenAI client
+# Replace with your actual API key
+api_key = "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"  # Don't commit this line!
 client = OpenAI(
     base_url="https://integrate.api.nvidia.com/v1",
-    api_key="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"  # Replace with your actual API key
+    api_key=api_key,
 )
 
-# Streamlit UI - Enhanced Styling and Layout
-st.set_page_config(
-    page_title="🌟 Sentiment Analyzer Pro",
-    page_icon="💬",
-    layout="centered"
-)
+# Streamlit UI with improved design
+st.set_page_config(page_title="Sentiment Analysis with Llama ", layout="wide")
 
-# Add custom CSS for advanced styling
-st.markdown(
-    """
-    <style>
-        body {
-            background: linear-gradient(120deg, #a6c1ee, #fbc2eb);
-            font-family: 'Arial', sans-serif;
-        }
-        .main {
-            background-color: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(10px);
-            padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
-        }
-        h1 {
-            color: #6a0572;
-            text-align: center;
-            font-size: 3em;
-            margin-bottom: 15px;
-            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
-        }
-        p {
-            color: #4a4e69;
-            text-align: center;
-            font-size: 1.1em;
-        }
-        .stButton>button {
-            background: linear-gradient(90deg, #ff8a00, #e52e71);
-            color: white;
-            border: none;
-            border-radius: 25px;
-            padding: 10px 20px;
-            font-size: 1.2em;
-            font-weight: bold;
-            cursor: pointer;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-        }
-        .stButton>button:hover {
-            transform: scale(1.05);
-            box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.3);
-        }
-        .sentiment-box {
-            padding: 20px;
-            border-radius: 15px;
-            text-align: center;
-            font-weight: bold;
-            font-size: 1.5em;
-        }
-        .positive {
-            background-color: #c8f7c5;
-            color: #256029;
-        }
-        .negative {
-            background-color: #f7c5c5;
-            color: #601828;
-        }
-        .neutral {
-            background-color: #c5eaf7;
-            color: #185a60;
-        }
-    </style>
-    """,
-    unsafe_allow_html=True,
-)
+st.title("Sentiment Analysis ️‍♀️  Using Llama-3.1 Nemotron 70b instruct")
 
-# App Header
-st.markdown("# 🌟 Sentiment Analyzer Pro")
-st.markdown(
-    """
-    Welcome to the **Sentiment Analyzer Pro**! 🎉  
-    Enter your text below, and we'll classify it as **Positive** 😊, **Negative** 😔, or **Neutral** 😐.  
-    """
-)
+# Text input with emojis and better styling
+text_area = st.empty()
+with text_area:
+    input_text = st.text_area(
+        "Enter text for sentiment analysis:", "", placeholder="Write your text here..."
+    )
 
-# Input Box with Placeholder
-st.markdown("### 🖋️ Enter Your Text Below:")
-input_text = st.text_area(
-    "",
-    placeholder="✨ Type something amazing here... e.g., 'Streamlit makes data apps so easy!' ✨",
-    height=150
-)
 
-# Divider
-st.markdown("---")
-st.markdown("### 🚀 Analyze Sentiment:")
+if st.button("Analyze Sentiment"):
+    if input_text:
+        # Prompt modification for sentiment classification
+        completion = client.chat.completions.create(
+            model="nvidia/llama-3.1-nemotron-70b-instruct",
+            messages=[
+                {
+                    "role": "user",
+                    "content": f"Analyze the sentiment of the following text and respond with one word: 'positive' , 'negative' , or 'neutral' . Text: '{input_text}'",
+                }
+            ],
+            temperature=0.5,
+            top_p=1,
+            max_tokens=1024,
+            stream=True,
+        )
 
-# Analyze Button with Interactive Result
-if st.button("🔍 Analyze Sentiment"):
-    if input_text.strip():
-        try:
-            # Modify the prompt and call the API
-            completion = client.chat.completions.create(
-                model="nvidia/llama-3.1-nemotron-70b-instruct",
-                messages=[
-                    {
-                        "role": "user",
-                        "content": f"Analyze the sentiment of the following text. Respond with one of these words: 'positive', 'negative', or 'neutral'. Text: '{input_text}'"
-                    }
-                ],
-                temperature=0.7,
-                top_p=0.9,
-                max_tokens=10,  # Keeping it concise
-                stream=False
-            )
+        sentiment = ""
+        for chunk in completion:
+            if chunk.choices[0].delta.content:
+                sentiment += chunk.choices[0].delta.content.strip()
 
-            # Extract the sentiment result
-            sentiment = completion.choices[0].message['content'].strip().lower()
-
-            # Display results dynamically
-            if sentiment == "positive":
-                st.markdown(
-                    f'<div class="sentiment-box positive">Sentiment: **Positive** 😊</div>',
-                    unsafe_allow_html=True,
-                )
-            elif sentiment == "negative":
-                st.markdown(
-                    f'<div class="sentiment-box negative">Sentiment: **Negative** 😔</div>',
-                    unsafe_allow_html=True,
-                )
-            elif sentiment == "neutral":
-                st.markdown(
-                    f'<div class="sentiment-box neutral">Sentiment: **Neutral** 😐</div>',
-                    unsafe_allow_html=True,
-                )
-            else:
-                st.warning("⚠️ Unable to determine sentiment. Please try again.")
-
-        except Exception as e:
-            st.error(f"Error: {e}")
+        # Display results with emojis for sentiment
+        if sentiment.strip():
+            st.write(f"Sentiment: **{sentiment.strip()}** {get_emoji(sentiment)}")
+        else:
+            st.write("Could not determine sentiment. Please try again.")
     else:
-        st.warning("⚠️ Please enter some text to analyze.")
+        st.write("Please enter some text to analyze.")
 
-# Footer
-st.markdown("---")
-st.markdown(
-    """
-    🛠️ Built with ❤️ using [Streamlit](https://streamlit.io) and NVIDIA's Llama-3.1 Model.  
-    ✨ Analyze your text sentiment with ease!  
-    """
-)
+
+def get_emoji(sentiment):
+    if sentiment.lower() == "positive":
+        return ""
+    elif sentiment.lower() == "negative":
+        return ""
+    else:
+        return ""
