@@ -51,21 +51,6 @@ st.markdown(
         border-radius: 10px;
         border-left: 5px solid #3498db;
     }
-    .flashing-alert {
-        background-color: #FF6347; /* Tomato red background for negative */
-        color: white;
-        font-size: 36px;
-        font-weight: bold;
-        text-align: center;
-        padding: 20px;
-        animation: flash 1s infinite;
-    }
-
-    @keyframes flash {
-        0% { background-color: #FF6347; }
-        50% { background-color: #FF0000; }
-        100% { background-color: #FF6347; }
-    }
     </style>
     """,
     unsafe_allow_html=True
@@ -82,10 +67,12 @@ if st.button("✨ Reveal Sentiment ✨"):
         with st.spinner("Unveiling sentiment... ⏳"):
             completion = client.chat.completions.create(
                 model="nvidia/llama-3.1-nemotron-70b-instruct",
-                messages=[{
-                    "role": "user",
-                    "content": f"Please analyze the sentiment of the following text and no matter what just respond with only one word: 'Positive', 'Negative', or 'Neutral'. Text: '{input_text}'"
-                }],
+                messages=[
+                    {
+                        "role": "user",
+                        "content": f"Please analyze the sentiment of the following text and no matter what just respond with only one word: 'Positive', 'Negative', or 'Neutral'. Text: '{input_text}'"
+                    }
+                ],
                 temperature=0.5,
                 top_p=1,
                 max_tokens=1024,
@@ -102,14 +89,13 @@ if st.button("✨ Reveal Sentiment ✨"):
                 # Display sentiment with appropriate emoji and animation
                 if "positive" in sentiment.lower():
                     st.success(f"Sentiment: **{sentiment.strip()}** 😄🎉")
-                    # No balloons for positive, keeping the message clean and pleasant.
+                    st.balloons()
                 elif "negative" in sentiment.lower():
                     st.error(f"Sentiment: **{sentiment.strip()}** 😞💔")
-                    # Use flashing red background as a negative signal.
-                    st.markdown('<div class="flashing-alert">🔥💥 Negative Sentiment! 💥🔥</div>', unsafe_allow_html=True)
+                    st.snow()  # Simulate sadness with snow
                 else:
                     st.info(f"Sentiment: **{sentiment.strip()}** 😐💭")
-                    st.snow()  # Only for neutral sentiment
+                    st.balloons()  # Simpler confetti-like effect for neutral
             else:
                 st.warning("Could not determine sentiment. Please try again. 😞")
     else:
