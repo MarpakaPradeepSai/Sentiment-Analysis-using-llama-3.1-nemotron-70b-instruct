@@ -107,12 +107,10 @@ if st.button("🔍 Analyze Sentiment"):
         # Modify the prompt to ensure the model responds with just 'positive', 'negative', or 'neutral'
         completion = client.chat.completions.create(
             model="nvidia/llama-3.1-nemotron-70b-instruct",
-            messages=[
-                {
-                    "role": "user",
-                    "content": f"Please analyze the sentiment of the following text carefully, determining whether the tone is positive, negative, or neutral. Once the analysis is complete, respond with only one word: 'Positive' if the sentiment conveys a favorable or optimistic tone, 'Negative' if the sentiment expresses dissatisfaction, sadness, or any form of negativity, or 'Neutral' if the sentiment does not lean towards either positive or negative but rather remains impartial or neutral. Do not provide any additional explanations or details, just the sentiment classification.'. Text: '{input_text}'"
-                }
-            ],
+            messages=[{
+                "role": "user",
+                "content": f"Please analyze the sentiment of the following text carefully, determining whether the tone is positive, negative, or neutral. Once the analysis is complete, respond with only one word: 'Positive' if the sentiment conveys a favorable or optimistic tone, 'Negative' if the sentiment expresses dissatisfaction, sadness, or any form of negativity, or 'Neutral' if the sentiment does not lean towards either positive or negative but rather remains impartial or neutral. Do not provide any additional explanations or details, just the sentiment classification.'. Text: '{input_text}'"
+            }],
             temperature=0.5,
             top_p=1,
             max_tokens=1024,
@@ -129,18 +127,18 @@ if st.button("🔍 Analyze Sentiment"):
         # Sentiment Box with Dynamic Styling
         if sentiment == "positive":
             st.markdown(
-                f'<div class="sentiment-box positive">Sentiment: **Positive** 😊</div>',
+                f'<div class="sentiment-box positive">Sentiment: <strong>Positive</strong> 😊</div>',
                 unsafe_allow_html=True,
             )
             st.balloons()
         elif sentiment == "negative":
             st.markdown(
-                f'<div class="sentiment-box negative">Sentiment: **Negative** 😔</div>',
+                f'<div class="sentiment-box negative">Sentiment: <strong>Negative</strong> 😔</div>',
                 unsafe_allow_html=True,
             )
         elif sentiment == "neutral":
             st.markdown(
-                f'<div class="sentiment-box neutral">Sentiment: **Neutral** 😐</div>',
+                f'<div class="sentiment-box neutral">Sentiment: <strong>Neutral</strong> 😐</div>',
                 unsafe_allow_html=True,
             )
             st.snow()
