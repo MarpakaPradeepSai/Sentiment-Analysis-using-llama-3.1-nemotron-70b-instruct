@@ -8,104 +8,60 @@ client = OpenAI(
     api_key="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"  # Replace with your actual API key
 )
 
-# Set page configuration for centered layout
-st.set_page_config(page_title="Sentiment Analysis Magic ✨", page_icon="🔮", layout="centered")
+# Set page configuration
+st.set_page_config(page_title="Sentiment Analysis Magic ✨", page_icon="🔮")
 
-# Custom CSS for enhanced design and increased sentiment text size
+# Custom CSS for styling
 st.markdown(
     """
     <style>
-    body {
-        background: linear-gradient(120deg, #84fab0, #8fd3f4); /* Gradient background */
-        animation: gradientBG 10s ease infinite;
-    }
-    @keyframes gradientBG {
-        0% { background-position: 0% 50%; }
-        50% { background-position: 100% 50%; }
-        100% { background-position: 0% 50%; }
-    }
     .reportview-container {
-        background: none;
+        background: linear-gradient(135deg, #f0f8ff, #e6e6fa); /* Light blue gradient background */
     }
     .stTextArea textarea {
         border-radius: 15px;
         padding: 20px;
-        font-size: 18px;
+        font-size: 16px;
         border: 2px solid #ddd;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        animation: fadeIn 1s;
     }
     .stButton button {
         background-color: #4CAF50; /* Green button */
         color: white;
         padding: 15px 30px;
         border: none;
-        border-radius: 20px;
+        border-radius: 15px;
         font-size: 18px;
         cursor: pointer;
         box-shadow: 0 4px 8px rgba(0,0,0,0.2);
         transition: all 0.3s ease;
-        animation: bounce 2s infinite;
     }
     .stButton button:hover {
         background-color: #45a049;
         transform: translateY(-2px);
         box-shadow: 0 6px 12px rgba(0,0,0,0.3);
     }
-    h1 {
+    .stMarkdown h1 {
         text-align: center;
-        font-size: 3rem;
         color: #333;
         font-weight: bold;
-        text-shadow: 2px 2px #ffffff;
-        animation: textGlow 2s ease-in-out infinite alternate;
     }
-    @keyframes bounce {
-        0%, 20%, 50%, 80%, 100% {
-            transform: translateY(0);
-        }
-        40% {
-            transform: translateY(-10px);
-        }
-        60% {
-            transform: translateY(-5px);
-        }
-    }
-    @keyframes textGlow {
-        from {
-            text-shadow: 0 0 10px #3498db, 0 0 20px #3498db;
-        }
-        to {
-            text-shadow: 0 0 20px #74b9ff, 0 0 30px #74b9ff;
-        }
-    }
-    .emoji {
-        font-size: 3rem;
-        animation: spin 2s linear infinite;
-    }
-    @keyframes spin {
-        from { transform: rotate(0deg); }
-        to { transform: rotate(360deg); }
-    }
-    /* New CSS to increase sentiment text size */
-    .sentiment-text {
-        font-size: 2.5rem; /* Increased font size */
-        font-weight: bold;
-        text-align: center;
+    .stAlert {
+        background-color: #f0f8ff;
+        padding: 15px;
+        border-radius: 10px;
+        border-left: 5px solid #3498db;
     }
     </style>
     """,
     unsafe_allow_html=True
 )
 
-# Header
-st.markdown("<h1>🔮 Sentiment Analysis Magic ✨</h1>", unsafe_allow_html=True)
-st.markdown("<h3>🌈 Unlock the power of AI and discover the sentiment of your text!</h3>", unsafe_allow_html=True)
+# Streamlit UI with animations and better layout
+st.markdown("<h1>Sentiment Analysis Magic ✨ Using Llama-3.1 Nemotron 70b instruct</h1>", unsafe_allow_html=True)
+st.write("Enter your text below to reveal its sentiment! 🌟")
 
-# Input box with placeholder
-input_text = st.text_area("👇 Type or paste your text below:", "", placeholder="e.g., This app is simply amazing! 💖")
+input_text = st.text_area("👇 Enter text here:", "")
 
-# Button with sentiment analysis
 if st.button("✨ Reveal Sentiment ✨"):
     if input_text:
         with st.spinner("Unveiling sentiment... ⏳"):
@@ -122,24 +78,23 @@ if st.button("✨ Reveal Sentiment ✨"):
                 max_tokens=1024,
                 stream=True
             )
-
+        
             sentiment = ""
             for chunk in completion:
                 if chunk.choices[0].delta.content:
                     sentiment += chunk.choices[0].delta.content.strip()
                     time.sleep(0.05)  # Simulate typing effect
-
-        # Display sentiment with animations and increased font size
-        if sentiment.strip():
-            if "positive" in sentiment.lower():
-                st.markdown(f'<div class="sentiment-text"><b>Sentiment:</b> Positive 😄🎉</div>', unsafe_allow_html=True)
-                st.balloons()  # For Positive Sentiment
-            elif "negative" in sentiment.lower():
-                st.markdown(f'<div class="sentiment-text"><b>Sentiment:</b> Negative 😞💔</div>', unsafe_allow_html=True)
+        
+            if sentiment.strip():
+                # Display sentiment with an appropriate emoji and animation
+                if "positive" in sentiment.lower():
+                    st.success(f"Sentiment: **{sentiment.strip()}** 😄🎉")
+                    st.balloons()
+                elif "negative" in sentiment.lower():
+                    st.error(f"Sentiment: **{sentiment.strip()}** 😞💔")
+                else:
+                    st.info(f"Sentiment: **{sentiment.strip()}** 😐💭")
             else:
-                st.markdown(f'<div class="sentiment-text"><b>Sentiment:</b> Neutral 😐💭</div>', unsafe_allow_html=True)
-                st.snow()  # For Neutral Sentiment (Snow Effect)
-        else:
-            st.warning("Could not determine sentiment. Please try again. 😞", icon="⚠️")
+                st.warning("Could not determine sentiment. Please try again. 😞")
     else:
-        st.warning("Please enter some text to analyze. 📝", icon="✏️")
+        st.warning("Please enter some text to analyze. 📝")
