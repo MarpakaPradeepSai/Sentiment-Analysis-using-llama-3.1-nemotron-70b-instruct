@@ -16,7 +16,7 @@ st.markdown(
     """
     <style>
     .reportview-container {
-        background: linear-gradient(135deg, #f0f8ff, #e6e6fa); /* Light blue gradient background */
+        background: linear-gradient(135deg, #f0f8ff, #e6e6fa);
     }
     .stTextArea textarea {
         border-radius: 15px;
@@ -25,7 +25,7 @@ st.markdown(
         border: 2px solid #ddd;
     }
     .stButton button {
-        background-color: #4CAF50; /* Green button */
+        background-color: #4CAF50;
         color: white;
         padding: 15px 30px;
         border: none;
@@ -56,46 +56,52 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-# Streamlit UI with animations and better layout
+# Streamlit UI
 st.markdown("<h1>Sentiment Analysis Magic ✨ Using Llama-3.1 Nemotron 70b instruct</h1>", unsafe_allow_html=True)
 st.write("Enter your text below to reveal its sentiment! 🌟")
 
 input_text = st.text_area("👇 Enter text here:", "")
+
+def display_falling_leaves():
+    leaves = ["🍂", "🍁", "🍃"]
+    for _ in range(5):
+        st.write(" ".join(leaves))
+        time.sleep(0.2)
+        leaves = [" "] + leaves[:-1]
 
 if st.button("✨ Reveal Sentiment ✨"):
     if input_text:
         with st.spinner("Unveiling sentiment... ⏳"):
             completion = client.chat.completions.create(
                 model="nvidia/llama-3.1-nemotron-70b-instruct",
-                messages=[{
-                    "role": "user",
-                    "content": f"Please analyze the sentiment of the following text and no matter what just respond with only one word: 'Positive', 'Negative', or 'Neutral'. Text: '{input_text}'"
-                }],
+                messages=[
+                    {
+                        "role": "user",
+                        "content": f"Please analyze the sentiment of the following text and no matter what just respond with only one word: 'Positive', 'Negative', or 'Neutral'. Text: '{input_text}'"
+                    }
+                ],
                 temperature=0.5,
                 top_p=1,
                 max_tokens=1024,
                 stream=True
             )
-        
+
             sentiment = ""
             for chunk in completion:
                 if chunk.choices[0].delta.content:
                     sentiment += chunk.choices[0].delta.content.strip()
-                    time.sleep(0.05)  # Simulate typing effect
-        
+                    time.sleep(0.05)
+
             if sentiment.strip():
-                # Display sentiment with appropriate emoji and animation
                 if "positive" in sentiment.lower():
                     st.success(f"Sentiment: **{sentiment.strip()}** 😄🎉")
-                    st.balloons()  # Only for positive sentiment
+                    st.balloons()
                 elif "negative" in sentiment.lower():
-                    st.error(f"Sentiment: **{sentiment.strip()}** 😞💔")
-                    # Custom visual effect for negative sentiment (fireworks-like effect)
-                    st.markdown('<div style="color: #FF4500; font-size: 36px; font-weight: bold;">🔥💥 Negative Sentiment! 💥🔥</div>', unsafe_allow_html=True)
-                    st.balloons()  # Optional: adding some extra effect (can be replaced with something more fitting)
+                    st.error(f"Sentiment: **{sentiment.strip()}** 💔⛈️")
+                    st.write("⚡⚡⚡")
                 else:
-                    st.info(f"Sentiment: **{sentiment.strip()}** 😐💭")
-                    st.snow()  # Only for neutral sentiment
+                    st.info(f"Sentiment: **{sentiment.strip()}** 😐🍂")
+                    display_falling_leaves()
             else:
                 st.warning("Could not determine sentiment. Please try again. 😞")
     else:
