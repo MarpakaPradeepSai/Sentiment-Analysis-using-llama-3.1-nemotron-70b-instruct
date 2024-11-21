@@ -123,21 +123,21 @@ if st.button("🔍 Analyze Sentiment"):
 
         sentiment = sentiment.strip().lower()
 
-        # Sentiment Box with Dynamic Styling
+        # Sentiment Box with Dynamic Styling and updated HTML for bold sentiment text
         if sentiment == "positive":
             st.markdown(
-                f'<div class="sentiment-box positive">Sentiment: <strong>Positive</strong> 😊</div>',
+                f'<div class="sentiment-box positive">Sentiment: <span> <strong>Positive</strong> 😊</span></div>',
                 unsafe_allow_html=True,
             )
             st.balloons()
         elif sentiment == "negative":
             st.markdown(
-                f'<div class="sentiment-box negative">Sentiment: <strong>Negative</strong> 😔</div>',
+                f'<div class="sentiment-box negative">Sentiment: <span> <strong>Negative</strong> 😔</span></div>',
                 unsafe_allow_html=True,
             )
         elif sentiment == "neutral":
             st.markdown(
-                f'<div class="sentiment-box neutral">Sentiment: <strong>Neutral</strong> 😐</div>',
+                f'<div class="sentiment-box neutral">Sentiment: <span> <strong>Neutral</strong> 😐</span></div>',
                 unsafe_allow_html=True,
             )
             st.snow()
@@ -150,6 +150,7 @@ if st.button("🔍 Analyze Sentiment"):
 st.markdown("---")
 st.markdown(
     """
-    🛠️ Built with ❤️ using [Streamlit](https://streamlit.io) and [NVIDIA's Llama-3.1-Nemotron-70b-instruct](https://build.nvidia.com/nvidia/llama-3_1-nemotron-70b-instruct)
+    🛠️ Built with ❤️ using [Streamlit](https://streamlit.io) and NVIDIA's Llama-3.1 Model.  
+    ✨ Enhance your text analytics today!  
     """
 )
