@@ -8,12 +8,32 @@ client = OpenAI(
 )
 
 # Streamlit UI
-st.title("Sentiment Analysis Using Llama-3.1 Nemotron 70b instruct")
+st.set_page_config(layout="wide")  # Set wide layout for more space
+
+# Header Section
+st.markdown(
+    """
+    <h1 style="color:#0066cc;">Sentiment Analysis Using Llama-3.1 Nemotron 70b</h1>
+    <p style="font-size:16px;">Analyze text sentiment with NVIDIA's Llama-3.1 Nemotron 70b model.</p>
+    """,
+    unsafe_allow_html=True
+)
 
 # Text input box for the user to enter text
-input_text = st.text_area("Enter text for sentiment analysis:", "")
+with st.container():
+    input_text = st.text_area(
+        "Enter text for sentiment analysis:",
+        height=150,
+        placeholder="Type or paste your text here..."
+    )
 
-if st.button("Analyze Sentiment"):
+# Analysis Button
+col1, col2 = st.columns([4, 1])
+with col2:
+    analyze_button = st.button("Analyze Sentiment")
+
+# Analysis Result
+if analyze_button:
     if input_text:
         # Modify the prompt to ensure the model responds with just 'positive', 'negative', or 'neutral'
         completion = client.chat.completions.create(
@@ -38,8 +58,26 @@ if st.button("Analyze Sentiment"):
         
         # Check the accumulated sentiment and display
         if sentiment.strip():
-            st.write(f"Sentiment: **{sentiment.strip()}**")
+            st.markdown(
+                f"""
+                <h2 style="color:#0066cc;">Sentiment Result:</h2>
+                <h1 style="color:{'green' if sentiment.strip() == 'Positive' else 'red' if sentiment.strip() == 'Negative' else 'orange'};">{sentiment.strip()}</h1>
+                """,
+                unsafe_allow_html=True
+            )
         else:
-            st.write("Could not determine sentiment. Please try again.")
+            st.markdown(
+                """
+                <h2 style="color:#0066cc;">Sentiment Result:</h2>
+                <h1 style="color:gray;">Could not determine sentiment. Please try again.</h1>
+                """,
+                unsafe_allow_html=True
+            )
     else:
-        st.write("Please enter some text to analyze.")
+        st.markdown(
+            """
+            <h2 style="color:#0066cc;">Sentiment Result:</h2>
+            <h1 style="color:gray;">Please enter some text to analyze.</h1>
+            """,
+            unsafe_allow_html=True
+        )
