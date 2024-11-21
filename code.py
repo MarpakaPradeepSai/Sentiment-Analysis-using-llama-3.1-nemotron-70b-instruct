@@ -57,7 +57,7 @@ st.markdown(
 )
 
 # Streamlit UI with animations and better layout
-st.markdown("<h1>Sentiment Analysis Magic ✨ Using Llama-3.1 Nemotron 70b instruct</h1>", unsafe_allow_html=True)
+#st.markdown("<h1>Sentiment Analysis Magic ✨ Using Llama-3.1 Nemotron 70b instruct</h1>", unsafe_allow_html=True)
 st.write("Enter your text below to reveal its sentiment! 🌟")
 
 input_text = st.text_area("👇 Enter text here:", "")
