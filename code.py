@@ -62,6 +62,13 @@ st.write("Enter your text below to reveal its sentiment! 🌟")
 
 input_text = st.text_area("👇 Enter text here:", "")
 
+def display_falling_leaves():
+    leaves = ["🍂", "🍁", "🍃"]
+    for _ in range(5):  # Simulate falling for a short duration
+        st.write(" ".join(leaves))
+        time.sleep(0.2)  # Adjust speed of falling leaves
+        leaves = [" "] + leaves[:-1]  # Move leaves down
+
 if st.button("✨ Reveal Sentiment ✨"):
     if input_text:
         with st.spinner("Unveiling sentiment... ⏳"):
@@ -91,11 +98,11 @@ if st.button("✨ Reveal Sentiment ✨"):
                     st.success(f"Sentiment: **{sentiment.strip()}** 😄🎉")
                     st.balloons()
                 elif "negative" in sentiment.lower():
-                    st.error(f"Sentiment: **{sentiment.strip()}** 😞💔")
-                    st.snow()  # Simulate sadness with snow
+                    st.error(f"Sentiment: **{sentiment.strip()}** 💔😞")
+                    # Here, you can add more emojis or a GIF to represent heartbreak
                 else:
                     st.info(f"Sentiment: **{sentiment.strip()}** 😐💭")
-                    st.balloons()  # Simpler confetti-like effect for neutral
+                    display_falling_leaves()  # Display falling leaves animation for neutral
             else:
                 st.warning("Could not determine sentiment. Please try again. 😞")
     else:
