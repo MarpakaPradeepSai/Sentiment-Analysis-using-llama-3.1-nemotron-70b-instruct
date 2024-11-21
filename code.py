@@ -21,7 +21,7 @@ if st.button("Analyze Sentiment"):
             messages=[
                 {
                     "role": "user",
-                    "content": f"Please analyze the sentiment of the following text and respond with only one word: 'positive', 'negative', or 'neutral'. Text: '{input_text}'"
+                    "content": f"Please analyze the sentiment of the following text and no matter what just respond with only one word: 'Positive', 'Negative', or 'Neutral'. Text: '{input_text}'"
                 }
             ],
             temperature=0.5,
