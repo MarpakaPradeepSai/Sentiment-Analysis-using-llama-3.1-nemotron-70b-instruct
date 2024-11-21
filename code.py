@@ -10,7 +10,7 @@ client = OpenAI(
 # Set page config (optional)
 st.set_page_config(page_title="Sentiment Analysis", page_icon="💬", layout="centered")
 
-# Add a custom header and subheader with some color
+# Add custom header and subheader with some color and emojis
 st.markdown("""
     <style>
     .title {
@@ -54,16 +54,18 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# Display the title and subheader
-st.markdown('<p class="title">Sentiment Analysis Using Llama-3.1 Nemotron 70b Instruct</p>', unsafe_allow_html=True)
-st.markdown('<p class="subheader">Enter some text and click "Analyze" to see its sentiment</p>', unsafe_allow_html=True)
+# Display the title with emojis
+st.markdown('<p class="title">Sentiment Analysis Using Llama-3.1 Nemotron 70b Instruct 💬🤖</p>', unsafe_allow_html=True)
+
+# Add a subheader with emojis
+st.markdown('<p class="subheader">Enter some text and click "Analyze" to see its sentiment 🚀💬</p>', unsafe_allow_html=True)
 
 # Add a text area with custom styling for input text
-input_text = st.text_area("Enter text for sentiment analysis:", "", height=150, key="input_text", max_chars=1000)
+input_text = st.text_area("Enter text for sentiment analysis ✍️:", "", height=150, key="input_text", max_chars=1000)
 
-# Add a loading spinner while analyzing the sentiment
-if st.button("Analyze Sentiment", key="analyze", help="Click to analyze sentiment"):
-    with st.spinner("Analyzing sentiment... Please wait."):
+# Add a loading spinner with a message while analyzing the sentiment
+if st.button("Analyze Sentiment 🔍", key="analyze", help="Click to analyze sentiment"):
+    with st.spinner("Analyzing sentiment... Please wait ⏳..."):
         if input_text:
             # Modify the prompt to ensure the model responds with just 'positive', 'negative', or 'neutral'
             completion = client.chat.completions.create(
@@ -86,11 +88,16 @@ if st.button("Analyze Sentiment", key="analyze", help="Click to analyze sentimen
                 if chunk.choices[0].delta.content:
                     sentiment += chunk.choices[0].delta.content.strip()
 
-            # Display the sentiment result in a styled result box
+            # Display the sentiment result in a styled result box with emojis
             if sentiment.strip():
-                st.markdown(f'<div class="result-box">Sentiment: {sentiment.strip()}</div>', unsafe_allow_html=True)
+                if sentiment.strip().lower() == "positive":
+                    sentiment_emoji = "😊"
+                elif sentiment.strip().lower() == "negative":
+                    sentiment_emoji = "😞"
+                else:
+                    sentiment_emoji = "😐"
+                st.markdown(f'<div class="result-box">Sentiment: {sentiment.strip()} {sentiment_emoji}</div>', unsafe_allow_html=True)
             else:
                 st.write("Could not determine sentiment. Please try again.")
         else:
-            st.write("Please enter some text to analyze.")
-
+            st.write("Please enter some text to analyze ✍️.")
