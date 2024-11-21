@@ -7,36 +7,54 @@ client = OpenAI(
     api_key="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"  # Replace with your actual API key
 )
 
-# Set a background image (replace with your image URL)
-background_image = """
-<style>
-[data-testid="stAppViewContainer"] {
-background-image: url("https://images.pexels.com/photos/3184418/pexels-photo-3184418.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2");
-background-size: cover;
-}
-</style>
-"""
-st.markdown(background_image, unsafe_allow_html=True)
+# Streamlit UI
+st.set_page_config(page_title="Sentiment Analyzer", page_icon="💬", layout="centered")
 
-# Streamlit UI enhancements
-st.set_page_config(page_title="Llama-3 Sentiment Analyzer 🌟", page_icon="✨")
+# Header Section
+st.markdown(
+    """
+    <style>
+        .title {
+            text-align: center;
+            font-size: 40px;
+            font-weight: bold;
+            color: #4CAF50;
+            margin-bottom: 20px;
+        }
+        .subtitle {
+            text-align: center;
+            font-size: 20px;
+            color: #6C757D;
+        }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+st.markdown('<div class="title">💬 Sentiment Analysis</div>', unsafe_allow_html=True)
+st.markdown('<div class="subtitle">Analyze text sentiment with the power of AI 🤖</div>', unsafe_allow_html=True)
 
-st.markdown("<div style='background-color: rgba(255, 255, 255, 0.8); padding: 20px; border-radius: 10px;'>", unsafe_allow_html=True)
+# Text Input Section
+input_text = st.text_area(
+    "📝 Enter text for sentiment analysis:", 
+    "", 
+    height=150, 
+    help="Type or paste any text here for sentiment analysis."
+)
 
-st.markdown("<h1 style='text-align: center; color: #2E8B57;'>Sentiment Analysis with Llama-3 🚀</h1>", unsafe_allow_html=True)
-st.markdown("<p style='text-align: center; font-size: 18px;'>Unveil the sentiment of your text with AI magic! ✨</p>", unsafe_allow_html=True)
-
-input_text = st.text_area("✍️ Enter your text here:", height=200, placeholder="Type something...")
-
-if st.button("✨ Analyze Sentiment ✨"):
-    if input_text:
-        with st.spinner("Analyzing... ⏳"):
+# Sentiment Analysis Button
+if st.button("🔍 Analyze Sentiment"):
+    if input_text.strip():
+        with st.spinner("Analyzing sentiment... ✨"):
+            # Modify the prompt to ensure the model responds with just 'positive', 'negative', or 'neutral'
             completion = client.chat.completions.create(
-                model="nvidia/llama-3.1-nemotron-70b-instruct",
+                model="nvidia/llama-3.1-nemotron-70b-instruct",  # Ensure this model supports sentiment analysis
                 messages=[
                     {
                         "role": "user",
-                        "content": f"Please analyze the sentiment of the following text and no matter what just respond with only one word: 'Positive', 'Negative', or 'Neutral'. Text: '{input_text}'"
+                        "content": (
+                            f"Please analyze the sentiment of the following text and respond with "
+                            f"only one word: 'Positive', 'Negative', or 'Neutral'.\n\nText: '{input_text}'"
+                        )
                     }
                 ],
                 temperature=0.5,
@@ -44,25 +62,34 @@ if st.button("✨ Analyze Sentiment ✨"):
                 max_tokens=1024,
                 stream=True
             )
-            sentiment = ""
+            
+            sentiment = ""  # Variable to accumulate the sentiment result
             for chunk in completion:
+                # Ensure that content exists in the chunk and accumulate
                 if chunk.choices[0].delta.content:
                     sentiment += chunk.choices[0].delta.content.strip()
 
-            if sentiment.strip():
-                sentiment_display = sentiment.strip().lower()
-                if sentiment_display == "positive":
-                    st.markdown("<div style='background-color: #E6F4EA; padding: 15px; border-radius: 10px; text-align: center;'>😄 Sentiment: **Positive**</div>", unsafe_allow_html=True)
-                elif sentiment_display == "negative":
-                    st.markdown("<div style='background-color: #FFEBEE; padding: 15px; border-radius: 10px; text-align: center;'>😞 Sentiment: **Negative**</div>", unsafe_allow_html=True)
-                else:
-                    st.markdown("<div style='background-color: #E3F2FD; padding: 15px; border-radius: 10px; text-align: center;'>😐 Sentiment: **Neutral**</div>", unsafe_allow_html=True)
-            else:
-                st.warning("⚠️ Could not determine sentiment. Please try again.")
+        # Display Result
+        if sentiment.strip():
+            sentiment_icon = {
+                "Positive": "😊",
+                "Negative": "😞",
+                "Neutral": "😐"
+            }.get(sentiment.strip(), "🤔")
+            
+            st.success(f"**Sentiment: {sentiment_icon} {sentiment.strip()}**")
+        else:
+            st.error("Could not determine sentiment. Please try again.")
     else:
-        st.warning("⚠️ Please enter some text to analyze.")
+        st.warning("⚠️ Please enter some text to analyze!")
 
-st.markdown("</div>", unsafe_allow_html=True)
-
-st.markdown("---")
-st.markdown("<p style='text-align: center; font-size: 14px; color: white;'>Powered by NVIDIA Llama-3 🦙</p>", unsafe_allow_html=True)
+# Footer
+st.markdown(
+    """
+    <hr style="border-top: 2px solid #bbb;">
+    <p style="text-align: center; font-size: 14px; color: #6C757D;">
+        Built with ❤️ using NVIDIA's Llama-3.1 Nemotron 70b instruct model and Streamlit
+    </p>
+    """,
+    unsafe_allow_html=True
+)
