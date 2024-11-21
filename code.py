@@ -60,7 +60,7 @@ st.markdown(
 st.markdown("<h1>Sentiment Analysis Magic ✨</h1>", unsafe_allow_html=True)
 st.write("Enter your text below to reveal its sentiment! 🌟")
 
-input_text = st.text_area("👇 Enter text here:", "")
+input_text = st.text_area("")
 
 if st.button("✨ Reveal Sentiment ✨"):
     if input_text:
