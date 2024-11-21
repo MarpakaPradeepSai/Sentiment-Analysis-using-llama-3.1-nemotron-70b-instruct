@@ -34,12 +34,16 @@ if st.button("Analyze Sentiment"):
             stream=True
         )
         
-        sentiment = ""
+        sentiment = ""  # Variable to accumulate the sentiment result
         for chunk in completion:
-            if chunk.choices[0].delta.content is not None:
-                sentiment = chunk.choices[0].delta.content.strip()
-
-        # Show the result to the user
-        st.write(f"Sentiment: **{sentiment}**")
+            # Ensure that content exists in the chunk and accumulate
+            if chunk.choices[0].delta.content:
+                sentiment += chunk.choices[0].delta.content.strip()
+        
+        # Check the accumulated sentiment and display
+        if sentiment.strip():
+            st.write(f"Sentiment: **{sentiment.strip()}**")
+        else:
+            st.write("Could not determine sentiment. Please try again.")
     else:
         st.write("Please enter some text to analyze.")
