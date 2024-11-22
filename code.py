@@ -1,13 +1,3 @@
-import streamlit as st
-from openai import OpenAI
-
-# Streamlit UI - Enhanced Styling and Layout
-st.set_page_config(
-    page_title="🌍🌈Multilingual Sentiment Analyzer",
-    page_icon="💬",
-    layout="centered"
-)
-
 # Add custom CSS for advanced styling
 st.markdown(
     """
@@ -81,6 +71,17 @@ st.markdown(
         .neutral {
             background-color: #c5eaf7;
             color: #185a60;
+        }
+        
+        /* Reduce margin between text and input box */
+        .stTextArea>div>div>textarea {
+            margin-top: 0px;  /* Remove any top margin */
+            padding-top: 0px; /* Remove padding if needed */
+        }
+        
+        /* Reduce margin between heading and input field */
+        .stMarkdown h5 {
+            margin-bottom: 5px; /* Reduce margin */
         }
     </style>
     """,
