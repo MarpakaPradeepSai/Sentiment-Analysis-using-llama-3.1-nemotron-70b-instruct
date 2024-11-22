@@ -134,7 +134,7 @@ if st.button("🔍 Analyze Sentiment"):
 
         # Modify the prompt to ensure the model responds with just 'positive', 'negative', or 'neutral'
         completion = client.chat.completions.create(
-            model="nvidia/llama-3.1-nemotron-70b-instruct",
+            model="meta/llama-3.1-405b-instruct",
             messages=[{
                 "role": "user",
                 "content": f"First, identify the language of this sentence, understand it, and then perform sentiment analysis to determine if the tone is Positive, Negative, or Neutral. After the analysis is complete, respond with only one word: (Positive, Negative, or Neutral). Do not provide any additional explanations or details, just the sentiment classification.'. Text: '{input_text}'"
