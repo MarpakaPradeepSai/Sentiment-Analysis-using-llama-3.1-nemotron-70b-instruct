@@ -96,7 +96,7 @@ st.markdown(
 )
 
 # API Key Input with Custom Styling
-st.markdown("##### 🛠️ Enter Your OpenAI API Key Below:")
+st.markdown("##### 🛠️ Enter Your NVIDIA API Key Below:")
 api_key = st.text_input(
     "Enter API Key",
     type="password",  # Mask the input for security
