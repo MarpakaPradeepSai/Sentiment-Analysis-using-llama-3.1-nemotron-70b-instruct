@@ -56,7 +56,7 @@ st.markdown(
             font-size: 1em;
             font-weight: 400;
             width: 100%;
-            margin-bottom: 20px;
+            margin-bottom: 10px;  /* Reduced margin here */
             border: 2px solid #6a0572;
             transition: border-color 0.3s;
         }
@@ -112,6 +112,7 @@ st.markdown(
     unsafe_allow_html=True
 )
 st.write("")
+
 # Input Box for Text to Analyze
 st.markdown("##### 🖋️ Enter Your Text Below To Analyze Its Sentiment:")
 input_text = st.text_area(
