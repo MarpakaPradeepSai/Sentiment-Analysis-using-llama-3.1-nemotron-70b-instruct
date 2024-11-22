@@ -82,15 +82,6 @@ st.markdown(
             background-color: #c5eaf7;
             color: #185a60;
         }
-        .languages-box {
-            padding: 20px;
-            border-radius: 15px;
-            background-color: #f0f0f0;
-            color: #333;
-            margin-bottom: 20px;
-            font-size: 1.1em;
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-        }
     </style>
     """,
     unsafe_allow_html=True,
@@ -101,34 +92,6 @@ st.markdown("# 🌍🌈Multilingual Sentiment Analyzer")
 st.markdown(
     """
     Welcome to the **Sentiment Analyzer Pro**! 🎉  
-    """
-)
-
-# Supported Languages Section (select box)
-supported_languages = [
-    "English", "Tamil (தமிழ்)", "Telugu (తెలుగు)", "Kannada (ಕನ್ನಡ)", "Malayalam (മലയാളം)",
-    "Hindi (हिंदी)", "Bengali (বাংলা)", "Punjabi (ਪੰਜਾਬੀ)", "French (Français)", "Spanish (Español)",
-    "Italian (Italiano)", "German (Deutsch)", "Dutch (Nederlands)", "Russian (Русский)", "Japanese (日本語)",
-    "Portuguese (Português)", "Arabic (العربية)", "Korean (한국어)", "Swedish (Svenska)", "Danish (Dansk)",
-    "Finnish (Suomi)", "Turkish (Türkçe)", "Greek (Ελληνικά)", "Polish (Polski)", "Romanian (Română)",
-    "Hebrew (עברית)", "Thai (ไทย)", "Vietnamese (Tiếng Việt)", "Chinese (中文)", "Hungarian (Magyar)",
-    "Czech (Čeština)", "Filipino/Tagalog"
-]
-
-# Display Supported Languages as Select Box
-st.markdown("### 📚 Supported Languages")
-selected_language = st.selectbox(
-    "Select a language to learn more about it:",
-    supported_languages,
-    index=0  # Default to English
-)
-
-# Display the selected language (informational only)
-st.write(f"You selected: {selected_language}")
-st.markdown(
-    """
-    Please note: You do **not** need to manually select a language for sentiment analysis.
-    The model will automatically detect the language of the input text and analyze the sentiment.
     """
 )
 
