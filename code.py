@@ -104,7 +104,7 @@ st.markdown(
     """
 )
 
-# Supported Languages Section (select box for visual display only)
+# Supported Languages Section (select box)
 supported_languages = [
     "English", "Tamil (தமிழ்)", "Telugu (తెలుగు)", "Kannada (ಕನ್ನಡ)", "Malayalam (മലയാളം)",
     "Hindi (हिंदी)", "Bengali (বাংলা)", "Punjabi (ਪੰਜਾਬੀ)", "French (Français)", "Spanish (Español)",
@@ -115,19 +115,20 @@ supported_languages = [
     "Czech (Čeština)", "Filipino/Tagalog"
 ]
 
-# Display Supported Languages in a Select Box (Disabled for selection)
+# Display Supported Languages as Select Box
 st.markdown("### 📚 Supported Languages")
-st.selectbox(
-    "Supported Languages", 
+selected_language = st.selectbox(
+    "Select a language to learn more about it:",
     supported_languages,
-    index=0,  # Default language is selected (visual purpose only)
-    disabled=True  # This disables the select box, making it only for visual purpose
+    index=0  # Default to English
 )
 
-# Informational Message to Users
+# Display the selected language (informational only)
+st.write(f"You selected: {selected_language}")
 st.markdown(
     """
-    **Please Note:** The model will automatically detect the language of your input text and perform sentiment analysis accordingly. You don't need to manually select a language.
+    Please note: You do **not** need to manually select a language for sentiment analysis.
+    The model will automatically detect the language of the input text and analyze the sentiment.
     """
 )
 
