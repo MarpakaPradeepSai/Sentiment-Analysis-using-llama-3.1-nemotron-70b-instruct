@@ -99,6 +99,7 @@ st.markdown(
 st.markdown("##### 🛠️ Enter Your NVIDIA API Key Below:")
 api_key = st.text_input(
     "Enter API Key",
+    type="password",  # Mask the input for security
     placeholder="🔑 Enter your NVIDIA API key here...",
     help="You can get your API key from your NVIDIA account dashboard."
 )
