@@ -130,7 +130,7 @@ if st.button("🔍 Analyze Sentiment"):
             model="nvidia/llama-3.1-nemotron-70b-instruct",
             messages=[{
                 "role": "user",
-                "content": f"Please analyze the sentiment of the following text carefully, determining whether the tone is positive, negative, or neutral. Once the analysis is complete, respond with only one word: 'Positive' if the sentiment conveys a favorable or optimistic tone, 'Negative' if the sentiment expresses dissatisfaction, sadness, or any form of negativity, or 'Neutral' if the sentiment does not lean towards either positive or negative but rather remains impartial or neutral. Do not provide any additional explanations or details, just the sentiment classification.'. Text: '{input_text}'"
+                "content": f"First, identify the language of this sentence, understand it, and then perform sentiment analysis to determine if the tone is Positive, Negative, or Neutral. After the analysis is complete, respond with only one word: (Positive, Negative, or Neutral). Do not provide any additional explanations or details, just the sentiment classification.'. Text: '{input_text}'"
             }],
             temperature=0.5,
             top_p=1,
