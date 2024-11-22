@@ -88,7 +88,7 @@ st.markdown(
 )
 
 # App Header
-st.markdown("# Multilingual Sentiment Analyzer")
+st.markdown("### Multilingual Sentiment Analyzer")
 st.markdown(
     """
     Welcome to the **Sentiment Analyzer Pro**! 🎉  
