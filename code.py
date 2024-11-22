@@ -121,7 +121,6 @@ input_text = st.text_area(
 )
 
 # Animated Divider
-st.markdown("---")
 st.markdown("### 🚀 Analyze Sentiment:")
 
 # Analyze Button with Interactive Result
