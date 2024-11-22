@@ -1,12 +1,6 @@
 import streamlit as st
 from openai import OpenAI
 
-# Initialize OpenAI client
-client = OpenAI(
-    base_url="https://integrate.api.nvidia.com/v1",
-    api_key="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"  # Replace with your actual API key
-)
-
 # Streamlit UI - Enhanced Styling and Layout
 st.set_page_config(
     page_title="🌈 Sentiment Analyzer Pro",
@@ -56,6 +50,19 @@ st.markdown(
             transform: scale(1.05);
             box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.3);
         }
+        .stTextInput>div>div>input {
+            border-radius: 10px;
+            padding: 10px;
+            font-size: 1em;
+            font-weight: 400;
+            width: 100%;
+            margin-bottom: 20px;
+            border: 2px solid #6a0572;
+            transition: border-color 0.3s;
+        }
+        .stTextInput>div>div>input:focus {
+            border-color: #ff8a00;
+        }
         .sentiment-box {
             padding: 20px;
             border-radius: 15px;
@@ -88,8 +95,17 @@ st.markdown(
     """
 )
 
-# Input Box with Animated Placeholder
-st.markdown("##### 🖋️ Enter Your Text Below To Analyze It's Sentiment:")
+# API Key Input with Custom Styling
+st.markdown("##### 🛠️ Enter Your OpenAI API Key Below:")
+api_key = st.text_input(
+    "Enter API Key",
+    type="password",  # Mask the input for security
+    placeholder="🔑 Enter your OpenAI API key here...",
+    help="You can get your API key from your OpenAI account dashboard."
+)
+
+# Input Box for Text to Analyze
+st.markdown("##### 🖋️ Enter Your Text Below To Analyze Its Sentiment:")
 input_text = st.text_area(
     "",
     placeholder="✨ Type something amazing here... e.g., 'Streamlit makes data apps so easy!' ✨",
@@ -102,7 +118,13 @@ st.markdown("### 🚀 Analyze Sentiment:")
 
 # Analyze Button with Interactive Result
 if st.button("🔍 Analyze Sentiment"):
-    if input_text.strip():
+    if api_key.strip() and input_text.strip():
+        # Initialize OpenAI client with user-provided API key
+        client = OpenAI(
+            base_url="https://integrate.api.nvidia.com/v1",
+            api_key=api_key  # Use the API key provided by the user
+        )
+
         # Modify the prompt to ensure the model responds with just 'positive', 'negative', or 'neutral'
         completion = client.chat.completions.create(
             model="nvidia/llama-3.1-nemotron-70b-instruct",
@@ -144,7 +166,7 @@ if st.button("🔍 Analyze Sentiment"):
         else:
             st.warning("⚠️ Unable to determine sentiment. Please try again.")
     else:
-        st.warning("⚠️ Please enter some text to analyze.")
+        st.warning("⚠️ Please make sure to enter both an API key and text to analyze.")
 
 # Footer
 st.markdown("---")
