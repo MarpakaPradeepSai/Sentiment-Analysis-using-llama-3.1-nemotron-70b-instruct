@@ -3,7 +3,7 @@ from openai import OpenAI
 
 # Streamlit UI - Enhanced Styling and Layout
 st.set_page_config(
-    page_title="🌈 Sentiment Analyzer Pro",
+    page_title="🌈 Multilingual Sentiment Analyzer",
     page_icon="💬",
     layout="centered"
 )
@@ -88,7 +88,7 @@ st.markdown(
 )
 
 # App Header
-st.markdown("# 🌟 Sentiment Analyzer Pro")
+st.markdown("# Multilingual Sentiment Analyzer")
 st.markdown(
     """
     Welcome to the **Sentiment Analyzer Pro**! 🎉  
