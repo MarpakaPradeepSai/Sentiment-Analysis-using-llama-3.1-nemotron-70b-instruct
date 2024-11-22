@@ -107,7 +107,7 @@ api_key = st.text_input(
 # Add a helpful message with a link for users to create an API key
 st.markdown(
     """
-    If you don't have an API key, you can create one by visiting [OpenAI's official website](https://platform.openai.com/signup) and signing up.
+    Don't have an API key? Create one [here](https://platform.openai.com/signup).
     """,
     unsafe_allow_html=True
 )
