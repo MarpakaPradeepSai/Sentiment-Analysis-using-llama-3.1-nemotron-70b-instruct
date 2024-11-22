@@ -1,4 +1,5 @@
 import streamlit as st
+from openai import OpenAI
 
 # Streamlit UI - Enhanced Styling and Layout
 st.set_page_config(
@@ -91,5 +92,86 @@ st.markdown("# 🌟 Sentiment Analyzer Pro")
 st.markdown(
     """
     Welcome to the **Sentiment Analyzer Pro**! 🎉  
+    """
+)
+
+# API Key Input with Custom Styling
+st.markdown("##### 🛠️ Enter Your OpenAI API Key Below:")
+api_key = st.text_input(
+    "Enter API Key",
+    type="password",  # Mask the input for security
+    placeholder="🔑 Enter your OpenAI API key here...",
+    help="You can get your API key from your OpenAI account dashboard."
+)
+
+# Input Box for Text to Analyze
+st.markdown("##### 🖋️ Enter Your Text Below To Analyze Its Sentiment:")
+input_text = st.text_area(
+    "",
+    placeholder="✨ Type something amazing here... e.g., 'Streamlit makes data apps so easy!' ✨",
+    height=150
+)
+
+# Animated Divider
+st.markdown("---")
+st.markdown("### 🚀 Analyze Sentiment:")
+
+# Analyze Button with Interactive Result
+if st.button("🔍 Analyze Sentiment"):
+    if api_key.strip() and input_text.strip():
+        # Initialize OpenAI client with user-provided API key
+        client = OpenAI(
+            base_url="https://integrate.api.nvidia.com/v1",
+            api_key=api_key  # Use the API key provided by the user
+        )
+
+        # Modify the prompt to ensure the model responds with just 'positive', 'negative', or 'neutral'
+        completion = client.chat.completions.create(
+            model="nvidia/llama-3.1-nemotron-70b-instruct",
+            messages=[{
+                "role": "user",
+                "content": f"First, identify the language of this sentence, understand it, and then perform sentiment analysis to determine if the tone is Positive, Negative, or Neutral. After the analysis is complete, respond with only one word: (Positive, Negative, or Neutral). Do not provide any additional explanations or details, just the sentiment classification.'. Text: '{input_text}'"
+            }],
+            temperature=0.5,
+            top_p=1,
+            max_tokens=1024,
+            stream=True
+        )
+
+        sentiment = ""  # Variable to accumulate the sentiment result
+        for chunk in completion:
+            if chunk.choices[0].delta.content:
+                sentiment += chunk.choices[0].delta.content.strip()
+
+        sentiment = sentiment.strip().lower()
+
+        # Sentiment Box with Dynamic Styling
+        if sentiment == "positive":
+            st.markdown(
+                f'<div class="sentiment-box positive">Sentiment: <strong>Positive</strong> 😊</div>',
+                unsafe_allow_html=True,
+            )
+            st.balloons()
+        elif sentiment == "negative":
+            st.markdown(
+                f'<div class="sentiment-box negative">Sentiment: <strong>Negative</strong> 😔</div>',
+                unsafe_allow_html=True,
+            )
+        elif sentiment == "neutral":
+            st.markdown(
+                f'<div class="sentiment-box neutral">Sentiment: <strong>Neutral</strong> 😐</div>',
+                unsafe_allow_html=True,
+            )
+            st.snow()
+        else:
+            st.warning("⚠️ Unable to determine sentiment. Please try again.")
+    else:
+        st.warning("⚠️ Please make sure to enter both an API key and text to analyze.")
+
+# Footer
+st.markdown("---")
+st.markdown(
+    """
+    🛠️ Built with ❤️ using [Streamlit](https://streamlit.io) and [NVIDIA's Llama-3.1-Nemotron-70b-instruct](https://build.nvidia.com/nvidia/llama-3_1-nemotron-70b-instruct)
     """
 )
