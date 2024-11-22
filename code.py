@@ -111,7 +111,7 @@ st.markdown(
     """,
     unsafe_allow_html=True
 )
-
+st.write("")
 # Input Box for Text to Analyze
 st.markdown("##### 🖋️ Enter Your Text Below To Analyze Its Sentiment:")
 input_text = st.text_area(
