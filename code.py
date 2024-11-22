@@ -91,7 +91,7 @@ st.markdown(
 st.markdown("# 🌍🌈Multilingual Sentiment Analyzer")
 st.markdown(
     """
-    Welcome to the **Sentiment Analyzer Pro**! 🎉  
+    Welcome to the **Multilingual Sentiment Analyzer**! 🎉  
     """
 )
 
