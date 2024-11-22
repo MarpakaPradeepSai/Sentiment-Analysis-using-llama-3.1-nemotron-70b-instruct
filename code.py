@@ -100,8 +100,8 @@ st.markdown("##### 🛠️ Enter Your OpenAI API Key Below:")
 api_key = st.text_input(
     "Enter API Key",
     type="password",  # Mask the input for security
-    placeholder="🔑 Enter your OpenAI API key here...",
-    help="You can get your API key from your OpenAI account dashboard."
+    placeholder="🔑 Enter your NVIDIA API key here...",
+    help="You can get your API key from your NVIDIA account dashboard."
 )
 
 # Add a helpful message with a link for users to create an API key
