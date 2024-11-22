@@ -56,7 +56,7 @@ st.markdown(
             font-size: 1em;
             font-weight: 400;
             width: 100%;
-            margin-bottom: 10px;  /* Reduced margin here */
+            margin-bottom: 0px;  /* Reduced margin to 0px */
             border: 2px solid #6a0572;
             transition: border-color 0.3s;
         }
