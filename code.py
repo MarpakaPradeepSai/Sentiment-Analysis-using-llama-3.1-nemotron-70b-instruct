@@ -63,10 +63,6 @@ st.markdown(
         .stTextInput>div>div>input:focus {
             border-color: #ff8a00;
         }
-        .stTextArea>div>div>textarea {
-            margin-top: 0px;
-            padding-top: 0px;
-        }
         .sentiment-box {
             padding: 20px;
             border-radius: 15px;
@@ -117,20 +113,8 @@ st.markdown(
 )
 st.write("")
 
-# Input Box for Text to Analyze with Custom CSS to Remove Extra Space
-st.markdown("##### 🖋️ Enter Your Text Below To Analyze Its Sentiment:", unsafe_allow_html=True)
-st.markdown(
-    """
-    <style>
-        .stTextArea>div>div>textarea {
-            margin-top: 0px;
-            padding-top: 0px;
-        }
-    </style>
-    """,
-    unsafe_allow_html=True
-)
-
+# Input Box for Text to Analyze
+st.markdown("##### 🖋️ Enter Your Text Below To Analyze Its Sentiment:")
 input_text = st.text_area(
     "",
     placeholder="✨ Type something amazing here... e.g., 'Streamlit makes data apps so easy!' ✨",
