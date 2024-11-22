@@ -107,7 +107,7 @@ api_key = st.text_input(
 # Add a helpful message with a link for users to create an API key
 st.markdown(
     """
-    Don't have an API key? Create one [here](https://platform.openai.com/signup).
+    Don't have an API key? Create one [here](https://build.nvidia.com/nvidia/llama-3_1-nemotron-70b-instruct).
     """,
     unsafe_allow_html=True
 )
