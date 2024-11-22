@@ -104,45 +104,33 @@ st.markdown(
     """
 )
 
-# Supported Languages Section
-supported_languages = """
-1. English  
-2. Tamil (தமிழ்)  
-3. Telugu (తెలుగు)  
-4. Kannada (ಕನ್ನಡ)  
-5. Malayalam (മലയാളം)  
-6. Hindi (हिंदी)  
-7. Bengali (বাংলা)  
-8. Punjabi (ਪੰਜਾਬੀ)  
-9. French (Français)  
-10. Spanish (Español)  
-11. Italian (Italiano)  
-12. German (Deutsch)  
-13. Dutch (Nederlands)  
-14. Russian (Русский)  
-15. Japanese (日本語)  
-16. Portuguese (Português)  
-17. Arabic (العربية)  
-18. Korean (한국어)  
-19. Swedish (Svenska)  
-20. Danish (Dansk)  
-21. Finnish (Suomi)  
-22. Turkish (Türkçe)  
-23. Greek (Ελληνικά)  
-24. Polish (Polski)  
-25. Romanian (Română)  
-26. Hebrew (עברית)  
-27. Thai (ไทย)  
-28. Vietnamese (Tiếng Việt)  
-29. Chinese (中文)  
-30. Hungarian (Magyar)  
-31. Czech (Čeština)  
-32. Filipino/Tagalog
-"""
+# Supported Languages Section (select box)
+supported_languages = [
+    "English", "Tamil (தமிழ்)", "Telugu (తెలుగు)", "Kannada (ಕನ್ನಡ)", "Malayalam (മലയാളം)",
+    "Hindi (हिंदी)", "Bengali (বাংলা)", "Punjabi (ਪੰਜਾਬੀ)", "French (Français)", "Spanish (Español)",
+    "Italian (Italiano)", "German (Deutsch)", "Dutch (Nederlands)", "Russian (Русский)", "Japanese (日本語)",
+    "Portuguese (Português)", "Arabic (العربية)", "Korean (한국어)", "Swedish (Svenska)", "Danish (Dansk)",
+    "Finnish (Suomi)", "Turkish (Türkçe)", "Greek (Ελληνικά)", "Polish (Polski)", "Romanian (Română)",
+    "Hebrew (עברית)", "Thai (ไทย)", "Vietnamese (Tiếng Việt)", "Chinese (中文)", "Hungarian (Magyar)",
+    "Czech (Čeština)", "Filipino/Tagalog"
+]
 
-# Display Supported Languages
+# Display Supported Languages as Select Box
 st.markdown("### 📚 Supported Languages")
-st.markdown(f'<div class="languages-box">{supported_languages}</div>', unsafe_allow_html=True)
+selected_language = st.selectbox(
+    "Select a language to learn more about it:",
+    supported_languages,
+    index=0  # Default to English
+)
+
+# Display the selected language (informational only)
+st.write(f"You selected: {selected_language}")
+st.markdown(
+    """
+    Please note: You do **not** need to manually select a language for sentiment analysis.
+    The model will automatically detect the language of the input text and analyze the sentiment.
+    """
+)
 
 # API Key Input with Custom Styling
 st.markdown("##### 🛠️ Enter Your NVIDIA API Key Below:")
