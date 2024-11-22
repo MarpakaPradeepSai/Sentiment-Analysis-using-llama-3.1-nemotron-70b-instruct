@@ -1,6 +1,3 @@
-import streamlit as st
-from openai import OpenAI
-
 # Streamlit UI - Enhanced Styling and Layout
 st.set_page_config(
     page_title="🌈 Sentiment Analyzer Pro",
@@ -82,6 +79,20 @@ st.markdown(
             background-color: #c5eaf7;
             color: #185a60;
         }
+        .api-key-input {
+            background-color: #fff3e6;
+            border-radius: 8px;
+            padding: 10px;
+            margin-top: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            width: 100%;
+        }
+        .api-key-label {
+            font-size: 1.1em;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #6a0572;
+        }
     </style>
     """,
     unsafe_allow_html=True,
@@ -97,11 +108,22 @@ st.markdown(
 
 # API Key Input with Custom Styling
 st.markdown("##### 🛠️ Enter Your OpenAI API Key Below:")
+st.markdown(
+    """
+    <div class="api-key-label">🔑 API Key:</div>
+    <div class="api-key-input">
+        Enter your OpenAI API key to proceed. You can get your API key from your OpenAI account dashboard.
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
+
 api_key = st.text_input(
     "Enter API Key",
     type="password",  # Mask the input for security
     placeholder="🔑 Enter your OpenAI API key here...",
-    help="You can get your API key from your OpenAI account dashboard."
+    help="You can get your API key from your OpenAI account dashboard.",
+    label_visibility="collapsed"  # Hide default label
 )
 
 # Input Box for Text to Analyze
