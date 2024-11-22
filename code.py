@@ -104,6 +104,14 @@ api_key = st.text_input(
     help="You can get your API key from your OpenAI account dashboard."
 )
 
+# Add a helpful message with a link for users to create an API key
+st.markdown(
+    """
+    If you don't have an API key, you can create one by visiting [OpenAI's official website](https://platform.openai.com/signup) and signing up.
+    """,
+    unsafe_allow_html=True
+)
+
 # Input Box for Text to Analyze
 st.markdown("##### 🖋️ Enter Your Text Below To Analyze Its Sentiment:")
 input_text = st.text_area(
