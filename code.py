@@ -82,6 +82,15 @@ st.markdown(
             background-color: #c5eaf7;
             color: #185a60;
         }
+        .languages-box {
+            padding: 20px;
+            border-radius: 15px;
+            background-color: #f0f0f0;
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 1.1em;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+        }
     </style>
     """,
     unsafe_allow_html=True,
@@ -94,6 +103,46 @@ st.markdown(
     Welcome to the **Sentiment Analyzer Pro**! 🎉  
     """
 )
+
+# Supported Languages Section
+supported_languages = """
+1. English  
+2. Tamil (தமிழ்)  
+3. Telugu (తెలుగు)  
+4. Kannada (ಕನ್ನಡ)  
+5. Malayalam (മലയാളം)  
+6. Hindi (हिंदी)  
+7. Bengali (বাংলা)  
+8. Punjabi (ਪੰਜਾਬੀ)  
+9. French (Français)  
+10. Spanish (Español)  
+11. Italian (Italiano)  
+12. German (Deutsch)  
+13. Dutch (Nederlands)  
+14. Russian (Русский)  
+15. Japanese (日本語)  
+16. Portuguese (Português)  
+17. Arabic (العربية)  
+18. Korean (한국어)  
+19. Swedish (Svenska)  
+20. Danish (Dansk)  
+21. Finnish (Suomi)  
+22. Turkish (Türkçe)  
+23. Greek (Ελληνικά)  
+24. Polish (Polski)  
+25. Romanian (Română)  
+26. Hebrew (עברית)  
+27. Thai (ไทย)  
+28. Vietnamese (Tiếng Việt)  
+29. Chinese (中文)  
+30. Hungarian (Magyar)  
+31. Czech (Čeština)  
+32. Filipino/Tagalog
+"""
+
+# Display Supported Languages
+st.markdown("### 📚 Supported Languages")
+st.markdown(f'<div class="languages-box">{supported_languages}</div>', unsafe_allow_html=True)
 
 # API Key Input with Custom Styling
 st.markdown("##### 🛠️ Enter Your NVIDIA API Key Below:")
@@ -112,17 +161,6 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-# List of languages for selectbox
-languages = [
-    "English", "Tamil (தமிழ்)", "Telugu (తెలుగు)", "Kannada (ಕನ್ನಡ)", "Malayalam (മലയാളം)",
-    "Hindi (हिंदी)", "Bengali (বাংলা)", "Punjabi (ਪੰਜਾਬੀ)", "French (Français)", "Spanish (Español)",
-    "Italian (Italiano)", "German (Deutsch)", "Dutch (Nederlands)", "Russian (Русский)", "Japanese (日本語)",
-    "Portuguese (Português)", "Arabic (العربية)", "Korean (한국어)", "Swedish (Svenska)", "Danish (Dansk)",
-    "Finnish (Suomi)", "Turkish (Türkçe)", "Greek (Ελληνικά)", "Polish (Polski)", "Romanian (Română)",
-    "Hebrew (עברית)", "Thai (ไทย)", "Vietnamese (Tiếng Việt)", "Chinese (中文)", "Hungarian (Magyar)",
-    "Czech (Čeština)", "Filipino/Tagalog"
-]
-
 # Input Box for Text to Analyze
 st.markdown("##### 🖋️ Enter Your Text Below To Analyze Its Sentiment:")
 input_text = st.text_area(
@@ -130,9 +168,6 @@ input_text = st.text_area(
     placeholder="✨ Type something amazing here... e.g., 'Streamlit makes data apps so easy!' ✨",
     height=150
 )
-
-# Language Selection
-selected_language = st.selectbox("Choose Language", languages)
 
 # Animated Divider
 st.markdown("### 🚀 Analyze Sentiment:")
